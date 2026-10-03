@@ -256,8 +256,10 @@ class EpubHandler extends ImageHandler {
 		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
 		if ( $ebookReader == null ) {
 			$ext = pathinfo($path, FILEINFO_EXTENSION);
+			print("\n");
 			var_dump($ext );
 			var_dump($path);
+			print("\n");
 			// if ($ext == "") { // This could happen when we just uploading the file and its name has no extension yet
 			// 	//TODO: Do something with it
 			// 	return null;
