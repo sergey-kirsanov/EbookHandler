@@ -256,6 +256,13 @@ class EpubHandler extends ImageHandler {
 	private function getEbookReader( $state, $path ) {
 		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
 		if ( !$ebookReader != null ) {
+			$ext = pathinfo($path, FILEINFO_EXTENSION);
+
+			if ($ext == "") { // This could happen when we just uploading the file and its name has no extension yet
+				//TODO: Do somethibng with it
+				return null;
+			}
+
 			$ebookReader = new EbookReader($path);
 			$state->setHandlerState( self::STATE_EBOOK_READER, $ebookReader );
 		}
@@ -269,6 +276,10 @@ class EpubHandler extends ImageHandler {
 	 */
 	public function getSizeAndMetadata( $state, $path ) {
 		$ebookReader = $this->getEbookReader( $state, $path );
+		if ($ebookReader == null) {
+			return false;
+		}
+
 		$metadata = $ebookReader->GetMetadata();
 
 		$meta = new BitmapMetadataHandler();
