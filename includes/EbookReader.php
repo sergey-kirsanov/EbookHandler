@@ -14,7 +14,7 @@ class EbookReader {
 	 * @param string $epubFilePath
 	 */
 	public function __construct( $epubFilePath ) {
-		$this->read($epubFilePath);
+		this->read($epubFilePath);
 	}
 
     private function read(string $epubFilePath) {
@@ -24,14 +24,15 @@ class EbookReader {
         }    
         
         $this->mBook = Ebook::read($epubFilePath);
+
+        if ($this->mBook->hasCover()) {
+            $imageSize = getimagesizefromstring($this->mBook->getCover()->getContents());
+            $this->mCoverSize = [$imageSize[0], $imageSize[1]];
+        }
     }
 
     public function saveCoverImageAs(string $coverFilePath) {
         
-        if ($this->mBook == null) {
-            return null;
-        }
-
         if ($coverFilePath == null) {
             return null;
         }    
@@ -41,22 +42,13 @@ class EbookReader {
             return null;
         }
 
-        $dir = pathinfo($coverFilePath, PATHINFO_DIRNAME);
-        $name = pathinfo($coverFilePath, PATHINFO_FILENAME);
-
         $coverImagePath = $coverImage->getPath();
         if ($coverImagePath == null) {
             return null;
         }
 
-        $extension = pathinfo($coverImagePath, PATHINFO_EXTENSION);
-
-        $dstFilePath = $dir . "/" . $name . "." . $extension; 
-
-        if ($coverImage->saveTo($dstFilePath)){
-             $size = getimagesize($dstFilePath);
-             $this->mCoverSize = [$size[0], $size[1]];
-             return $dstFilePath;
+        if ($coverImage->saveTo($coverFilePath)){
+             return $coverFilePath;
         }
 
         return null;
@@ -78,17 +70,17 @@ class EbookReader {
             return null;
         }
 
-        $data = array();
+        $data = [];
 
-        $data['Title'] = $this->mBook->getTitle() ?? "";
-        $data['Description'] = $this->mBook->getDescription() ?? "";
-        $data['Author'] = $this->mBook->getAuthorMain() != null ? $this->mBook->getAuthorMain()->getName(): "";
-        $data['CreatedAt'] = $this->mBook->getCreatedAt() != null ? $this->mBook->getCreatedAt()->format("d.m.Y H:i:s") : "";
-        $data['Language'] = $this->mBook->getLanguage() ?? "";
-        $data['Publisher'] = $this->mBook->getPublisher() ?? "";
-        $data['PublishDate'] = $this->mBook->getPublishDate() != null ? $this->mBook->getPublishDate()->format("d.m.Y") : "";
+        $data['Title'] = $this->mBook->getTitle();
+        $data['Description'] = $this->mBook->getDescription();
+        $data['Author'] = $this->mBook->getAuthorMain() != null ? $this->mBook->getAuthorMain()->getName() : null;
+        $data['CreatedAt'] = $this->mBook->getCreatedAt() != null ? $this->mBook->getCreatedAt()->format("d.m.Y H:i:s") : null;
+        $data['Language'] = $this->mBook->getLanguage();
+        $data['Publisher'] = $this->mBook->getPublisher();
+        $data['PublishDate'] = $this->mBook->getPublishDate() != null ? $this->mBook->getPublishDate()->format("d.m.Y") : null;
         foreach ($this->mBook->getIdentifiers() as $id) {
-            $data['Identifier'] = $id->getScheme(). " " . $id->getValue();
+            $data['Identifier'] = $id->getScheme() . " " . $id->getValue();
         }
 
         return $data;
