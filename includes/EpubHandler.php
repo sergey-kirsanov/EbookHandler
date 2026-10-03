@@ -447,7 +447,7 @@ class EpubHandler extends ImageHandler {
 								$dimsByPage[$i] = $ebookReader->getPageSize();
 							}
 							else {
-								$dimsByPage[$i] = [1000, 1000];
+								$dimsByPage[$i] = self::getPageSize([1000,1000]);
 							}
 						}
 					return [ 'pageCount' => 1, 'dimensionsByPage' => $dimsByPage ];
@@ -464,7 +464,7 @@ class EpubHandler extends ImageHandler {
 	 * @return bool
 	 */
 	public function getPageText( File $image, $page ) {
-		return false;
+		return "test";
 	}
 
 	/**
