@@ -1,5 +1,6 @@
 {
 	"name": "EPUB Handler",
+	"version": "1.0.0",
 	"author": [
 		"Sergey Kirsanov"
 	],

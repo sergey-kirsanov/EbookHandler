@@ -357,6 +357,7 @@ class EpubHandler extends ImageHandler {
 
 		// Own formatting to consider our resources
 		for($i = 0 ; $i < 2 ; $i++) {
+			
 			$visibleOrCollapsed = $formatted[$i];
 			foreach($visibleOrCollapsed as $f) {
 				
@@ -368,7 +369,6 @@ class EpubHandler extends ImageHandler {
 				} 
 			}
 		}
-
 
 		return $formatted;
 	}
