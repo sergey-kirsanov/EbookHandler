@@ -1,0 +1,21 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"epub-desc": "Обработчик для предпросмотра EPUB файлов в режиме просмотра файла - отображает обложку и ее миниатюру а также метаданные",
+	"epub-file-page-warning": "EPUB is a complex format that may expose some of your private information in some cases. Make sure to configure your EPUB viewer in a safe way.",
+	"epub-file-page-warning-header": "Privacy considerations",
+	"epub-file-page-warning-footer": "This issue is not specific to this particular file, but a general issue with the EPUB format.",
+	"epub-file-page-warning-info": "Learn more about this issue.",
+	"epub_no_metadata": "Не могу получить метаданные из EPUB файла.",
+	"epub_page_error": "Номер страницы вне допустимого диапазона.",
+	"ebooktitle": "Название книги",
+	"ebookdescription": "Описание",
+	"ebookauthor": "Автор",
+	"ebookcreatedat": "Дата создания файла",
+	"ebooklanguage" : "Язык книги",
+	"ebookpublisher": "Издатель",
+	"ebookpublishdate": "Дата издания",
+	"ebookidentifier": "Идентификатор",
+	"ebookcopyright": "Права"
+}
