@@ -330,16 +330,16 @@ class EpubHandler extends ImageHandler {
 	 * @return array
 	 */
 	public function getThumbType( $ext, $mime, $params = null ) {
-		global $wgEpubOutputExtension;
+		global $wgEpubHandlerOutputExtension;
 		static $mime;
 
 		if ( !isset( $mime ) ) {
 			$magic = MediaWikiServices::getInstance()->getMimeAnalyzer();
-			$mime = $magic->guessTypesForExtension( $wgEpubOutputExtension );
+			$mime = $magic->guessTypesForExtension( $wgEpubHandlerOutputExtension );
 		}
 		print ("getThumbType");
-		var_dump([ $wgEpubOutputExtension, $mime ]);
-		return [ $wgEpubOutputExtension, $mime ];
+		var_dump([ $wgEpubHandlerOutputExtension, $mime ]);
+		return [ $wgEpubHandlerOutputExtension, $mime ];
 	}
 
 	/**
