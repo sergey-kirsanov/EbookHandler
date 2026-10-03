@@ -33,10 +33,17 @@
 	"ResourceModules": {
 		"epubhandler.messages": {
 			"messages": [
-				"epub-file-page-warning",
-				"epub-file-page-warning-header",
-				"epub-file-page-warning-info",
-				"epub-file-page-warning-footer"
+				"epub_no_metadata",
+				"epub_page_error",
+				"ebooktitle",
+				"ebookdescription",
+				"ebookauthor",
+				"ebookcreatedat",
+				"ebooklanguage",
+				"ebookpublisher",
+				"ebookpublishdate",
+				"ebookidentifier",
+				"ebookcopyright"
 			]
 		}
 	},
