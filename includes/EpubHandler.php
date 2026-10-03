@@ -332,13 +332,13 @@ class EpubHandler extends ImageHandler {
 
 	private function sharptrim(string $str, string $patt) {
 		$i = strpos($str, $patt);
-		if ($i >= 0) {
+		if ($i == 0) {
 			$str = substr($str, strlen($patt), strlen($str) - strlen($patt)); 
 		}
 		$i = stripos($str, $patt);
-		if ($i >= 0) {
+		if ($i > 0) {
 			$str = substr($str, 0, strlen($str) - strlen($patt)); 
-		}
+		} 
 		return $str;
 	}
 
