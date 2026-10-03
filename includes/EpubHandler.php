@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\EpubHandler;
 use File;
 use ImageHandler;
 use BitmapMetadataHandler;
+use Language;
 use MediaTransformError;
 use MediaTransformOutput;
 use MediaWiki\Context\IContextSource;
@@ -36,17 +37,6 @@ use TransformParameterError;
  */
 
 class EpubHandler extends ImageHandler {
-	/**
-	 * Keep in sync with epubhandler.messages in extension.json
-	 *
-	 * @see getWarningConfig
-	 */
-	private const MESSAGES = [
-		'main' => 'epub-file-page-warning',
-		'header' => 'epub-file-page-warning-header',
-		'info' => 'epub-file-page-warning-info',
-		'footer' => 'epub-file-page-warning-footer',
-	];
 
 	/**
 	 * 10MB is considered a large file
@@ -153,7 +143,7 @@ class EpubHandler extends ImageHandler {
 	 */
 	protected function doThumbError( $width, $height, $msg ) {
 		return new MediaTransformError( 'thumbnail_error',
-			$width, $height, wfMessage( $msg )->inContentLanguage()->text() );
+			$width, $height, wfMessage( $msg )->inLanguage(null)->text() );
 	}
 
 	/**
@@ -176,7 +166,7 @@ class EpubHandler extends ImageHandler {
 		$page = (int)$params['page'];
 
 		if ( $page > $this->pageCount( $image ) ) {
-			return $this->doThumbError( $width, $height, 'ebook_handler-page-error' );
+			return $this->doThumbError( $width, $height, 'ebookhandler-page-error' );
 		}
 
 		if ( $flags & self::TRANSFORM_LATER ) {
@@ -363,6 +353,7 @@ class EpubHandler extends ImageHandler {
 				
 				if (strpos($f[0], "ebook", 0) > 0) {
 					$f[0].trim("exif_");
+					$f[1] = wfMessage($f[0])->inLanguage(null)->text();
 				} 
 			}
 		}
