@@ -351,7 +351,7 @@ class EpubHandler extends ImageHandler {
 			$visibleOrCollapsed = $formatted[$i];
 			foreach($visibleOrCollapsed as $f) {
 				
-				if (strpos($f[0], "ebook", 0) > 0) {
+				if (strpos($f['id'], "ebookhandler", 0) > 0) {
 					$f['id'] = $f['id'].trim("exif_");
 					$f['name'] = wfMessage($f['id'])->text();
 				} 
