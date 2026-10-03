@@ -357,14 +357,14 @@ class EpubHandler extends ImageHandler {
 
 		// Own formatting to consider our resources
 		for($i = 0 ; $i < 2 ; $i++) {
-			
+
 			$visibleOrCollapsed = $formatted[$i];
 			foreach($visibleOrCollapsed as $f) {
 				
 				if (strpos($f[0], "ebook", 0) > 0) {
 
 					$f[0].trim("exif_");
-					$f[1] = wfMessage($f[0])->inContentLanguage();
+					$f[1] = wfMessage($f[0]);
 	
 				} 
 			}
