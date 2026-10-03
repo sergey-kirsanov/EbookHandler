@@ -156,8 +156,6 @@ class EpubHandler extends ImageHandler {
 	public function doTransform( $image, $dstPath, $dstUrl, $params, $flags = 0 ) {
 		global $wgEpubHandlerPostProcessor, $wgEpubHandlerOutputExtension, $wgEpubHandlerJpegQuality;
 
-		print("doTransform");
-
 		if ( !$this->normaliseParams( $image, $params ) ) {
 			return new TransformParameterError( $params );
 		}
@@ -211,6 +209,7 @@ class EpubHandler extends ImageHandler {
 			$err = sprintf( 'thumbnail failed on %s: image %s does not have cover "',
 				wfHostname(), $image->getName() );
 			wfDebugLog( 'thumbnail', $err);
+			return;
 		}
 
 		$cmd = wfEscapeShellArg(
