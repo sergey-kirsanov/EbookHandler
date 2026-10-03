@@ -358,6 +358,8 @@ class EpubHandler extends ImageHandler {
 			}
 		}
 
+		var_dump($formatted);
+
 		return $formatted;
 	}
 
