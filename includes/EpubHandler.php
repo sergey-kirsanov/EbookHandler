@@ -370,6 +370,7 @@ class EpubHandler extends ImageHandler {
 			$f = $collapsed[$i];
 			if (strpos($f["id"], "ebookhandler", 0) > 0) {
 				$id = $f["id"].trim("exif_").trim("exif-");
+				print("ID=" . $id . "\n");
 				$name = wfMessage($id)->text();
 				$value = $f["value"];
 				$newF = ["id" => $id, "name" => $name, "value" => $value];
