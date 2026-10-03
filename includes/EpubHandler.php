@@ -403,7 +403,7 @@ class EpubHandler extends ImageHandler {
 	 * @return bool|int
 	 */
 	public function pageCount( File $image ) {
-		return 1;
+		return 2;
 	}
 
 	/**
@@ -440,12 +440,16 @@ class EpubHandler extends ImageHandler {
 					$ebookReader = $file->getHandlerState(self::STATE_EBOOK_READER);
 
 					$dimsByPage = [];
-					$count = 1;
-					if ( $ebookReader ) {
+					$count = 2;
+					
 						for ( $i = 1; $i <= $count; $i++ ) {
-							$dimsByPage[$i] = $ebookReader->getPageSize();
+							if ( $ebookReader ) {
+								$dimsByPage[$i] = $ebookReader->getPageSize();
+							}
+							else {
+								$dimsByPage[$i] = [1000, 1000];
+							}
 						}
-					}
 					return [ 'pageCount' => 1, 'dimensionsByPage' => $dimsByPage ];
 				}
 			);
