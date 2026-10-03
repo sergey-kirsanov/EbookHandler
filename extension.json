@@ -11,6 +11,9 @@
 		"MediaWiki": ">= 1.43"
 	},
 	"config": {
+		"EpubHandlerOutputExtension": {
+			"value": "jpg"
+		},
 		"EpubHandlerDpi": {
 			"value": 150
 		},
