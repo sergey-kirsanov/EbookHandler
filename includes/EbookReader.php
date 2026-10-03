@@ -8,7 +8,7 @@ class EbookReader {
     
     private ?Ebook $mBook = null;
 
-    private array $mCoverSize;
+    private array $mCoverSize = [0, 0];
     
     /**
 	 * @param string $epubFilePath

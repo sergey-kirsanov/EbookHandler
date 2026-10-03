@@ -213,7 +213,14 @@ class EpubHandler extends ImageHandler {
 		$image->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
 
 		$tmpFileName = "/tmp/asfadsfsdf.gif";
-		$ebookReader->saveCoverImageAs($tmpFileName);
+		$realTmpFileName = $ebookReader->saveCoverImageAs($tmpFileName);
+
+		if ( $realTmpFileName == null ) {
+			$err = sprintf( 'thumbnail failed on %s: image %s does not have cover "',
+				wfHostname(), $image->getName() );
+			wfDebugLog( 'thumbnail', $err);
+			return new MediaTransformError( 'thumbnail_error', $width, $height, $err );
+		}
 
 		$cmd = wfEscapeShellArg(
 			$wgEpubHandlerPostProcessor,
@@ -223,7 +230,7 @@ class EpubHandler extends ImageHandler {
 			$wgEpubHandlerJpegQuality,
 			"-resize",
 			'"'. (string)$width . 'x"',
-			$tmpFileName,
+			$realTmpFileName,
 			$dstPath
 		);
 		$cmd .= ")";
@@ -232,7 +239,7 @@ class EpubHandler extends ImageHandler {
 		$retval = '';
 		$err = wfShellExecWithStderr( $cmd, $retval );
 
-		unlink($tmpFileName);
+		unlink($realTmpFileName);
 
 		$removed = $this->removeBadFile( $dstPath, $retval );
 
@@ -280,7 +287,9 @@ class EpubHandler extends ImageHandler {
 
 		$tmpFilePath = "/tmp/asfasfasf.png";
 		$coverPath = $ebookReader->saveCoverImageAs($tmpFilePath);
-		unlink($coverPath);
+		if ($coverPath != null) {
+			unlink($coverPath);
+		}
 		$size = $ebookReader->getCoverSize();
 		$sizes = EpubHandler::getPageSize( $size );
 		if ( $sizes ) {
