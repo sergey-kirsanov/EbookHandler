@@ -330,6 +330,18 @@ class EpubHandler extends ImageHandler {
 		return self::METADATA_GOOD;
 	}
 
+	public function sharptrim(string $str, string $patt) {
+		$i = strpos($str, $patt);
+		if ($i >= 0) {
+			$str = substr($str, strlen($patt), strlen($str) - strlen($patt)); 
+		}
+		$i = stripos($str, $patt);
+		if ($i >= 0) {
+			$str = substr($str, 0, strlen($str) - strlen($patt)); 
+		}
+		return $str;
+	}
+
 	/**
 	 * @param File $image
 	 * @param bool|IContextSource $context Context to use (optional)
@@ -352,7 +364,9 @@ class EpubHandler extends ImageHandler {
 			
 			$f = $visible[$i];
 			if (strpos($f["id"], "ebookhandler", 0) > 0) {
-				$id = $f["id"].trim("exif_").trim("exif-");
+				$id = sharptrim($f["id"], "exif-");
+				$id = sharptrim($id, "exif_");
+				print("ID=" . $id . "\n");
 				$name = wfMessage($id)->text();
 				$value = $f["value"];
 				$newF = ["id" => $id, "name" => $name, "value" => $value];
@@ -369,7 +383,8 @@ class EpubHandler extends ImageHandler {
 			
 			$f = $collapsed[$i];
 			if (strpos($f["id"], "ebookhandler", 0) > 0) {
-				$id = $f["id"].trim("exif_").trim("exif-");
+				$id = sharptrim($f["id"], "exif-");
+				$id = sharptrim($id, "exif_");
 				print("ID=" . $id . "\n");
 				$name = wfMessage($id)->text();
 				$value = $f["value"];
