@@ -384,6 +384,7 @@ class EpubHandler extends ImageHandler {
 			$f = $collapsed[$i];
 			if (strpos($f["id"], "ebookhandler", 0) > 0) {
 				$id = $this->sharptrim($f["id"], "exif-");
+				print("ID=" . $id . "\n");
 				$id = $this->sharptrim($id, "exif_");
 				print("ID=" . $id . "\n");
 				$name = wfMessage($id)->text();
