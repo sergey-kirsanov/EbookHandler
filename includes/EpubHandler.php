@@ -350,6 +350,8 @@ class EpubHandler extends ImageHandler {
 
 			print("I am here");
 			$visibleOrCollapsed = $formatted[$i];
+			var_dump($visibleOrCollapsed);
+			
 			foreach($visibleOrCollapsed as $f) {
 				
 				if (strpos($f["id"], "ebookhandler", 0) > 0) {
