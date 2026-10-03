@@ -347,26 +347,42 @@ class EpubHandler extends ImageHandler {
 
 		// Own formatting to consider our resources
 		$visible = $formatted["visible"];
-		foreach($visible as $f) {
+		$newVisible = [];
+		for($i = 0; $i < count($visible); $i++) {
 			
+			$f = $visible[$i];
 			if (strpos($f["id"], "ebookhandler", 0) > 0) {
-				$f["id"] = $f["id"].trim("exif_").trim("exif-");
-				var_dump($f);
-				print(wfMessage($f["id"])->text() . "\n");
-				$f["name"] = wfMessage($f["id"])->text();
-			} 
+				$id = $f["id"].trim("exif_").trim("exif-");
+				$name = wfMessage($id)->text();
+				$value = $f["value"];
+				$newF = ["id" => $id, "name" => $name, "value" => $value];
+				$newVisible[$i] = $newF;
+			}
+			else{
+				$newVisible[$i] = $f;
+			}
 		}
 
 		$collapsed = $formatted["collapsed"];
-		foreach($collapsed as $f) {
+		$newCollapsed = [];
+		for($i = 0; $i < count($$collapsed); $i++) {
 			
+			$f = $$collapsed[$i];
 			if (strpos($f["id"], "ebookhandler", 0) > 0) {
-				$f["id"] = $f["id"].trim("exif_").trim("exif-");
-				var_dump($f);
-				print(wfMessage($f["id"])->text() . "\n");
-				$f["name"] = wfMessage($f["id"])->text();
-			} 
+				$id = $f["id"].trim("exif_").trim("exif-");
+				$name = wfMessage($id)->text();
+				$value = $f["value"];
+				$newF = ["id" => $id, "name" => $name, "value" => $value];
+				$newCollapsed[$i] = $newF;
+			}
+			else{
+				$newCollapsed[$i] = $f;
+			}
 		}
+
+		$newFormatted = [];
+		$newFormatted = ["visible" => $newVisible, "collapsed" => $newCollapsed];
+		$formatted = $newFormatted;
 
 		var_dump($formatted);
 
