@@ -431,7 +431,7 @@ class EpubHandler extends ImageHandler {
 					$ebookReader = $file->getHandlerState(self::STATE_EBOOK_READER);
 
 					$dimsByPage = [];
-					$count = 2;
+					$count = 1;
 					
 						for ( $i = 1; $i <= $count; $i++ ) {
 							if ( $ebookReader ) {
