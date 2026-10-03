@@ -88,7 +88,7 @@ class EbookReader {
         $data['Publisher'] = $this->mBook->getPublisher() ?? "";
         $data['PublishDate'] = $this->mBook->getPublishDate() != null ? $this->mBook->getPublishDate()->format("d.m.Y") : "";
         foreach ($this->mBook->getIdentifiers() as $id) {
-            $data['Identifier ' . $id->getScheme()] = $id->getValue();
+            $data['Identifier'] = $id->getScheme(). " " . $id->getValue();
         }
 
         return $data;
