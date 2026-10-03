@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\EpubHandler;
 use File;
 use ImageHandler;
 use BitmapMetadataHandler;
-use Language;
 use MediaTransformError;
 use MediaTransformOutput;
 use MediaWiki\Context\IContextSource;
@@ -259,6 +258,8 @@ class EpubHandler extends ImageHandler {
 		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
 		if ( $ebookReader == null ) {
 			$ext = pathinfo($path, FILEINFO_EXTENSION);
+			var_dump($ext );
+			var_dump($path);
 			// if ($ext == "") { // This could happen when we just uploading the file and its name has no extension yet
 			// 	//TODO: Do somethibng with it
 			// 	return null;
@@ -455,7 +456,7 @@ class EpubHandler extends ImageHandler {
 		if ( !$info ) {
 			$cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
 			$info = $cache->getWithSetCallback(
-				$cache->makeKey( 'file-epub-dimensions', $file->getSha1() ),
+				$cache->makeKey( 'file-ebook-dimensions', $file->getSha1() ),
 				$cache::TTL_MONTH,
 				static function () use ( $file ) {
 
