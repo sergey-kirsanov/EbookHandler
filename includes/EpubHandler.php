@@ -76,7 +76,7 @@ class EpubHandler extends ImageHandler {
 	 * @return bool
 	 */
 	public function isMultiPage( $file ) {
-		return true;
+		return false;
 	}
 
 	/**
