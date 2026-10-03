@@ -241,7 +241,8 @@ class EpubHandler extends ImageHandler {
 			"-resize",
 			(string)$width,
 			"-",
-			"-format " . $wgEpubHandlerOutputExtension,
+			"-format",
+			$wgEpubHandlerOutputExtension,
 			$realTmpFileName,
 			$dstPath
 		);
