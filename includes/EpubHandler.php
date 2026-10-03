@@ -163,7 +163,7 @@ class EpubHandler extends ImageHandler {
 	 * @return MediaTransformError|MediaTransformOutput|ThumbnailImage|TransformParameterError
 	 */
 	public function doTransform( $image, $dstPath, $dstUrl, $params, $flags = 0 ) {
-		global $wgEpubHandlerPostProcessor, $wgEpubHandlerDpi, $wgEpubHandlerJpegQuality;
+		global $wgEpubHandlerPostProcessor, $wgEpubHandlerOutputExtension, $wgEpubHandlerJpegQuality;
 
 		print("1\n");
 
@@ -241,6 +241,7 @@ class EpubHandler extends ImageHandler {
 			"-resize",
 			(string)$width,
 			"-",
+			"-format " . $wgEpubHandlerOutputExtension,
 			$realTmpFileName,
 			$dstPath
 		);
