@@ -335,10 +335,10 @@ class EpubHandler extends ImageHandler {
 		if ($i == 0) {
 			$str = substr($str, strlen($patt), strlen($str) - strlen($patt)); 
 		}
-		$i = stripos($str, $patt);
-		if ($i > 0) {
+		$i = strpos($str, $patt);
+		if ($i == strlen($str) - strlen($patt)) {
 			$str = substr($str, 0, strlen($str) - strlen($patt)); 
-		} 
+		}
 		return $str;
 	}
 
