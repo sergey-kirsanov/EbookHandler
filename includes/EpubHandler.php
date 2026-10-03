@@ -238,17 +238,17 @@ class EpubHandler extends ImageHandler {
 			"8",
 			"-quality",
 			$wgEpubHandlerJpegQuality,
-			"-resize",
-			(string)$width,
-			"-",
 			"-format",
 			$wgEpubHandlerOutputExtension,
+			"-resize",
+			(string)$width,
 			$realTmpFileName,
 			$dstPath
 		);
-
+		
 		wfDebug( __METHOD__ . ": $cmd\n" );
 		$retval = '';
+
 		$err = wfShellExecWithStderr( $cmd, $retval );
 
 		unlink($realTmpFileName);
