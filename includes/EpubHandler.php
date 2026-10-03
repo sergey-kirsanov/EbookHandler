@@ -255,19 +255,38 @@ class EpubHandler extends ImageHandler {
 	private function getEbookReader( $state, $path ) {
 		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
 		if ( $ebookReader == null ) {
-			$ext = pathinfo($path, FILEINFO_EXTENSION);
-			print("\n");
-			var_dump($ext );
-			var_dump($path);
-			print("\n");
-			// if ($ext == "") { // This could happen when we just uploading the file and its name has no extension yet
-			// 	//TODO: Do something with it
-			// 	return null;
-			// }
-
+			$ebookReader = $this->createEbookReader2($state, $path);
 			$ebookReader = new EbookReader($path);
 			$state->setHandlerState( self::STATE_EBOOK_READER, $ebookReader );
 		}
+		return $ebookReader;
+	}
+
+	private function createEbookReader(File $file): ?EbookReader {
+		
+		$ebookReader = null;	
+
+		if ( !($file->getLocalRefPath() === false) ) { //TODO: Heavy operation
+		
+			$ebookReader = new EbookReader($file->getName());
+			$file->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
+		}
+
+		return $ebookReader;
+	}
+
+	/**
+	 * @param \MediaHandlerState $state
+	 * @param string $path
+	 * @return EbookReader
+	 */
+	private function createEbookReader2($state, string $path): ?EbookReader {
+		
+		$ebookReader = null;	
+
+		$ebookReader = new EbookReader($path);
+		$state->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
+
 		return $ebookReader;
 	}
 
@@ -455,16 +474,15 @@ class EpubHandler extends ImageHandler {
 		$info = $file->getHandlerState( self::STATE_DIMENSION_INFO );
 		if ( !$info ) {
 			$cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
+			$ebookReader = $file->getHandlerState(self::STATE_EBOOK_READER);
+			if ( $ebookReader == null ) {
+				$ebookReader = $this->createEbookReader($file);
+			}
+			
 			$info = $cache->getWithSetCallback(
 				$cache->makeKey( 'file-ebook-dimensions', $file->getSha1() ),
 				$cache::TTL_MONTH,
-				static function () use ( $file ) {
-
-					$ebookReader = $file->getHandlerState(self::STATE_EBOOK_READER);
-					if ( $ebookReader == null ) {
-						$ebookReader = new EbookReader($file->getName());
-						$file->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
-					}
+				static function () use ( $file, $ebookReader ) {
 
 					$dimsByPage = [];
 					// TODO: For the time being (we do not have API to get also pages separately from e-book)
@@ -472,7 +490,7 @@ class EpubHandler extends ImageHandler {
 					$count = 1;
 					
 						for ( $i = 1; $i <= $count; $i++ ) {
-							if ( $ebookReader ) {
+							if ( $ebookReader != null ) {
 								// TODO: For the time being (we do not have API to get also pages separately from e-book)
 								// so we use cover size
 								$dimsByPage[$i] = $ebookReader->getCoverSize();
