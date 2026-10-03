@@ -9,13 +9,13 @@
 	"epub-file-page-warning-info": "Learn more about this issue.",
 	"epub_no_metadata": "Cannot get metadata from EPUB.",
 	"epub_page_error": "Page number not in range.",
-	"exif-title": "E-Book title",
-	"exif-description": "Description",
-	"exif-author": "Author",
-	"exif-createdat": "Created At",
-	"exif-language" : "Language",
-	"exif-publisher": "Publisher",
-	"exif-publishdate": "Publish date",
-	"Identifier": "Book identifier",
-	"Copyright": "Copyright"
+	"EbookTitle": "E-Book title",
+	"EbookDescription": "Description",
+	"EbookAuthor": "Author",
+	"EbookCreatedAt": "Created At",
+	"EbookLanguage" : "Language",
+	"EbookPublisher": "Publisher",
+	"EbookPublishDate": "Publish date",
+	"EbookIdentifier": "Book identifier",
+	"EbookCopyright": "Copyright"
 }
