@@ -211,7 +211,6 @@ class EpubHandler extends ImageHandler {
 			$err = sprintf( 'thumbnail failed on %s: image %s does not have cover "',
 				wfHostname(), $image->getName() );
 			wfDebugLog( 'thumbnail', $err);
-			return new MediaTransformError( 'thumbnail_error', $width, $height, $err );
 		}
 
 		$cmd = wfEscapeShellArg(
