@@ -176,7 +176,7 @@ class EpubHandler extends ImageHandler {
 		$page = (int)$params['page'];
 
 		if ( $page > $this->pageCount( $image ) ) {
-			return $this->doThumbError( $width, $height, 'epub_page_error' );
+			return $this->doThumbError( $width, $height, 'ebook_handler-page-error' );
 		}
 
 		if ( $flags & self::TRANSFORM_LATER ) {

@@ -72,17 +72,17 @@ class EbookReader {
 
         $data = [];
 
-        $data['EbookTitle'] = $this->mBook->getTitle();
-        $data['EbookDescription'] = $this->mBook->getDescription();
-        $data['EbookAuthor'] = $this->mBook->getAuthorMain() != null ? $this->mBook->getAuthorMain()->getName() : null;
-        $data['EbookCreatedAt'] = $this->mBook->getCreatedAt() != null ? $this->mBook->getCreatedAt()->format("d.m.Y H:i:s") : null;
-        $data['EbookLanguage'] = $this->mBook->getLanguage();
-        $data['EbookPublisher'] = $this->mBook->getPublisher();
-        $data['EbookPublishDate'] = $this->mBook->getPublishDate() != null ? $this->mBook->getPublishDate()->format("d.m.Y") : null;
+        $data['EbookHandler-Title'] = $this->mBook->getTitle();
+        $data['EbookHandler-Description'] = $this->mBook->getDescription();
+        $data['EbookHandler-Author'] = $this->mBook->getAuthorMain() != null ? $this->mBook->getAuthorMain()->getName() : null;
+        $data['EbookHandler-CreatedAt'] = $this->mBook->getCreatedAt() != null ? $this->mBook->getCreatedAt()->format("d.m.Y H:i:s") : null;
+        $data['EbookHandler-Language'] = $this->mBook->getLanguage();
+        $data['EbookHandler-Publisher'] = $this->mBook->getPublisher();
+        $data['EbookHandler-PublishDate'] = $this->mBook->getPublishDate() != null ? $this->mBook->getPublishDate()->format("d.m.Y") : null;
         foreach ($this->mBook->getIdentifiers() as $id) {
-            $data['EbookIdentifier'] = $id->getScheme() . " " . $id->getValue();
+            $data['EbookHandler-Identifier'] = $id->getScheme() . " " . $id->getValue();
         }
-        $data['EbookCopyright'] = $this->mBook->getCopyright(100);
+        $data['EbookHandler-Copyright'] = $this->mBook->getCopyright(100);
 
         return $data;
     }

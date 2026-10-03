@@ -2,16 +2,16 @@
 	"@metadata": {
 		"authors": []
 	},
-	"epub-desc": "Handler for pre-viewing EPUB files in image mode - gets cover and its thumbnail and metadata",
-	"epub_no_metadata": "Cannot get metadata from EPUB.",
-	"epub_page_error": "Page number not in range.",
-	"ebooktitle": "E-Book title",
-	"ebookdescription": "Description",
-	"ebookauthor": "Author",
-	"ebookcreatedat": "Created At",
-	"ebooklanguage" : "Language",
-	"ebookpublisher": "Publisher",
-	"ebookpublishdate": "Publish date",
-	"ebookidentifier": "Book identifier",
-	"ebookcopyright": "Copyright"
+	"ebookhandler-desc": "Handler for pre-viewing EPUB files in image mode - gets cover and its thumbnail and metadata",
+	"ebookhandler-no-metadata": "Cannot get metadata from EPUB.",
+	"ebookhandler-page-error": "Page number not in range.",
+	"ebookhandler-title": "E-Book title",
+	"ebookhandler-description": "Description",
+	"ebookhandler-author": "Author",
+	"ebookhandler-createdat": "Created At",
+	"ebookhandler-language" : "Language",
+	"ebookhandler-publisher": "Publisher",
+	"ebookhandler-publishdate": "Publish date",
+	"ebookhandler-identifier": "Book identifier",
+	"ebookhandler-copyright": "Copyright"
 }

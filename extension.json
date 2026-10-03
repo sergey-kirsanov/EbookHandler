@@ -5,7 +5,7 @@
 		"Sergey Kirsanov"
 	],
 	"url": "https://github.com/sergey-kirsanov/EpubHandler",
-	"descriptionmsg": "epub-desc",
+	"descriptionmsg": "ebookhandler-desc",
 	"license-name": "GPL-2.0-or-later",
 	"type": "media",
 	"requires": {
@@ -29,23 +29,6 @@
 		"EpubHandler": [
 			"i18n"
 		]
-	},
-	"ResourceModules": {
-		"epubhandler.messages": {
-			"messages": [
-				"epub_no_metadata",
-				"epub_page_error",
-				"ebooktitle",
-				"ebookdescription",
-				"ebookauthor",
-				"ebookcreatedat",
-				"ebooklanguage",
-				"ebookpublisher",
-				"ebookpublishdate",
-				"ebookidentifier",
-				"ebookcopyright"
-			]
-		}
 	},
 	"MediaHandlers": {
 		"application/epub+zip": "MediaWiki\\Extension\\EpubHandler\\EpubHandler"
