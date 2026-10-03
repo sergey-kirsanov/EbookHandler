@@ -143,7 +143,7 @@ class EpubHandler extends ImageHandler {
 	 */
 	protected function doThumbError( $width, $height, $msg ) {
 		return new MediaTransformError( 'thumbnail_error',
-			$width, $height, wfMessage( $msg )->inLanguage(null)->text() );
+			$width, $height, wfMessage( $msg )->text() );
 	}
 
 	/**
@@ -353,7 +353,7 @@ class EpubHandler extends ImageHandler {
 				
 				if (strpos($f[0], "ebook", 0) > 0) {
 					$f[0].trim("exif_");
-					$f[1] = wfMessage($f[0])->inLanguage(null)->text();
+					$f[1] = wfMessage($f[0])->text();
 				} 
 			}
 		}
