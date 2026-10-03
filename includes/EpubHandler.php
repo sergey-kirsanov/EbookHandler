@@ -165,8 +165,6 @@ class EpubHandler extends ImageHandler {
 	public function doTransform( $image, $dstPath, $dstUrl, $params, $flags = 0 ) {
 		global $wgEpubHandlerPostProcessor, $wgEpubHandlerOutputExtension, $wgEpubHandlerJpegQuality;
 
-		print("1\n");
-
 		if ( !$this->normaliseParams( $image, $params ) ) {
 			return new TransformParameterError( $params );
 		}
@@ -175,13 +173,9 @@ class EpubHandler extends ImageHandler {
 		$height = (int)$params['height'];
 		$page = (int)$params['page'];
 
-		print("2\n");
-
 		if ( $page > $this->pageCount( $image ) ) {
 			return $this->doThumbError( $width, $height, 'epub_page_error' );
 		}
-
-		print("3\n");
 
 		if ( $flags & self::TRANSFORM_LATER ) {
 			return new ThumbnailImage( $image, $dstUrl, false, [
@@ -194,8 +188,6 @@ class EpubHandler extends ImageHandler {
 		if ( !wfMkdirParents( dirname( $dstPath ), null, __METHOD__ ) ) {
 			return $this->doThumbError( $width, $height, 'thumbnail_dest_directory' );
 		}
-
-		print("4\n");
 
 		// Thumbnail extraction is very inefficient for large files.
 		// Provide a way to pool count limit the number of downloaders.
@@ -223,8 +215,6 @@ class EpubHandler extends ImageHandler {
 		$tmpFileName = "/tmp/asfadsfsdf.jpg";
 		$realTmpFileName = $ebookReader->saveCoverImageAs($tmpFileName);
 
-		var_dump($realTmpFileName);
-		
 		if ( $realTmpFileName == null ) {
 			$err = sprintf( 'thumbnail failed on %s: image %s does not have cover "',
 				wfHostname(), $image->getName() );
@@ -256,14 +246,11 @@ class EpubHandler extends ImageHandler {
 		$removed = $this->removeBadFile( $dstPath, $retval );
 
 		if ( $retval != 0 || $removed ) {
-			print("Bad thumb file");
 			wfDebugLog( 'thumbnail',
 				sprintf( 'thumbnail failed on %s: error %d "%s" from "%s"',
 				wfHostname(), $retval, trim( $err ), $cmd ) );
 			return new MediaTransformError( 'thumbnail_error', $width, $height, $err );
 		}
-
-		sleep(5);
 
 		return new ThumbnailImage( $image, $dstUrl, $dstPath, [
 			'width' => $width,
@@ -428,7 +415,6 @@ class EpubHandler extends ImageHandler {
 	 * @return bool|mixed
 	 */
 	protected function getDimensionInfo( File $file ) {
-		print("getDimensionInfo");
 		$info = $file->getHandlerState( self::STATE_DIMENSION_INFO );
 		if ( !$info ) {
 			$cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
