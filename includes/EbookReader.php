@@ -83,7 +83,7 @@ class EbookReader {
         $data['Title'] = $this->mBook->getTitle() ?? "";
         $data['Description'] = $this->mBook->getDescription() ?? "";
         $data['Author'] = $this->mBook->getAuthorMain() != null ? $this->mBook->getAuthorMain()->getName(): "";
-        $data['CreatedAt'] = $this->mBook->getCreatedAt() != null ? $this->mBook->getCreatedAt()->format("d.m.Y hh:mm:ss") : "";
+        $data['CreatedAt'] = $this->mBook->getCreatedAt() != null ? $this->mBook->getCreatedAt()->format("d.m.Y H:i:s") : "";
         $data['Language'] = $this->mBook->getLanguage() ?? "";
         $data['Publisher'] = $this->mBook->getPublisher() ?? "";
         $data['PublishDate'] = $this->mBook->getPublishDate() != null ? $this->mBook->getPublishDate()->format("d.m.Y") : "";
