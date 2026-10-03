@@ -243,7 +243,6 @@ class EpubHandler extends ImageHandler {
 			$realTmpFileName,
 			$dstPath
 		);
-		$cmd .= ")";
 
 		wfDebug( __METHOD__ . ": $cmd\n" );
 		$retval = '';
