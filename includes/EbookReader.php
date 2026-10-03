@@ -14,7 +14,7 @@ class EbookReader {
 	 * @param string $epubFilePath
 	 */
 	public function __construct( $epubFilePath ) {
-		this->read($epubFilePath);
+		$this->read($epubFilePath);
 	}
 
     private function read(string $epubFilePath) {
@@ -82,6 +82,7 @@ class EbookReader {
         foreach ($this->mBook->getIdentifiers() as $id) {
             $data['Identifier'] = $id->getScheme() . " " . $id->getValue();
         }
+        $data['Copyright'] = $this->mBook->getCopyright(100);
 
         return $data;
     }

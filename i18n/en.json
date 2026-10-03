@@ -16,5 +16,6 @@
 	"exif-language" : "Language",
 	"exif-publisher": "Publisher",
 	"exif-publishdate": "Publish date",
-	"Identifier": "Book identifier"
+	"Identifier": "Book identifier",
+	"Copyright": "Copyright"
 }

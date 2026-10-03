@@ -16,7 +16,7 @@ use TransformParameterError;
 /**
  * Copyright © 2026 Sergey Kirsanov <sergey@kirsanov.info>
  *
- * Inspired by djvuhandler from Tim Starling and PDfHandler by Xarax
+ * Inspired by djvuhandler from Tim Starling and PDfHandler by Martin Seidel (Xarax)
  * Modified and written by Sergey Kirsanov
  *
  * This program is free software; you can redistribute it and/or modify
@@ -76,6 +76,8 @@ class EpubHandler extends ImageHandler {
 	 * @return bool
 	 */
 	public function isMultiPage( $file ) {
+		// It effectively disables pages preview
+		// which is not implemented yet
 		return false;
 	}
 
@@ -212,8 +214,7 @@ class EpubHandler extends ImageHandler {
 		$ebookReader = new EbookReader($srcPath);
 		$image->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
 
-		$tmpFileName = "/tmp/asfadsfsdf.jpg";
-		$realTmpFileName = $ebookReader->saveCoverImageAs($tmpFileName);
+		$realTmpFileName = $ebookReader->saveCoverImageAs($dstPath);
 
 		if ( $realTmpFileName == null ) {
 			$err = sprintf( 'thumbnail failed on %s: image %s does not have cover "',
@@ -232,7 +233,7 @@ class EpubHandler extends ImageHandler {
 			$wgEpubHandlerOutputExtension,
 			"-resize",
 			(string)$width,
-			$realTmpFileName,
+			$dstPath,
 			$dstPath
 		);
 		
@@ -240,8 +241,6 @@ class EpubHandler extends ImageHandler {
 		$retval = '';
 
 		$err = wfShellExecWithStderr( $cmd, $retval );
-
-		unlink($realTmpFileName);
 
 		$removed = $this->removeBadFile( $dstPath, $retval );
 
@@ -266,7 +265,7 @@ class EpubHandler extends ImageHandler {
 	 */
 	private function getEbookReader( $state, $path ) {
 		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
-		if ( !$ebookReader ) {
+		if ( !$ebookReader != null ) {
 			$ebookReader = new EbookReader($path);
 			$state->setHandlerState( self::STATE_EBOOK_READER, $ebookReader );
 		}
@@ -287,13 +286,8 @@ class EpubHandler extends ImageHandler {
 		$data = [];
 		$data['mergedMetadata'] = $meta->getMetadataArray();
 
-		$tmpFilePath = "/tmp/asfasfasf.png";
-		$coverPath = $ebookReader->saveCoverImageAs($tmpFilePath);
-		if ($coverPath != null) {
-			unlink($coverPath);
-		}
 		$size = $ebookReader->getCoverSize();
-		$sizes = EpubHandler::getPageSize( $size );
+		$sizes = self::getPageSize( $size );
 		if ( $sizes ) {
 			return $sizes + [ 'metadata' => $data ];
 		}
@@ -358,10 +352,6 @@ class EpubHandler extends ImageHandler {
 			return false;
 		}
 
-		foreach($mergedMetadata as $key => $val){
-			$key = wfMessage( $key )->inContentLanguage()->text();
-		}
-
 		// Inherited from MediaHandler.
 		return $this->formatMetadataHelper( $mergedMetadata, $context );
 	}
@@ -369,19 +359,6 @@ class EpubHandler extends ImageHandler {
 	/** @inheritDoc */
 	protected function formatTag( string $key, $vals, $context = false ) {
 		switch ( $key ) {
-			case 'pdf-Producer':
-			case 'pdf-Version':
-				return htmlspecialchars( $vals );
-			case 'pdf-PageSize':
-				foreach ( $vals as &$val ) {
-					$val = htmlspecialchars( $val );
-				}
-				return $vals;
-			case 'pdf-Encrypted':
-				// @todo: The value isn't i18n-ised; should be done here.
-				// For reference, if encrypted this field's value looks like:
-				// "yes (print:yes copy:no change:no addNotes:no)"
-				return htmlspecialchars( $vals );
 			default:
 				break;
 		}
@@ -395,6 +372,8 @@ class EpubHandler extends ImageHandler {
 	 * @return bool|int
 	 */
 	public function pageCount( File $image ) {
+		// TODO: For the time being (we do not API to get also pages separately from e-book)
+		// so we limit to one page
 		return 1;
 	}
 
@@ -431,13 +410,19 @@ class EpubHandler extends ImageHandler {
 					$ebookReader = $file->getHandlerState(self::STATE_EBOOK_READER);
 
 					$dimsByPage = [];
+					// TODO: For the time being (we do not API to get also pages separately from e-book)
+					// so we limit to one page
 					$count = 1;
 					
 						for ( $i = 1; $i <= $count; $i++ ) {
 							if ( $ebookReader ) {
-								$dimsByPage[$i] = $ebookReader->getPageSize();
+								// TODO: For the time being (we do not API to get also pages separately from e-book)
+								// so ve use cover size
+								$dimsByPage[$i] = $ebookReader->getCoverSize();
 							}
 							else {
+								// It can be so that this code called before  $ebookReader is
+								// initialized and put to state
 								$dimsByPage[$i] = self::getPageSize([1000,1000]);
 							}
 						}
@@ -455,6 +440,8 @@ class EpubHandler extends ImageHandler {
 	 * @return bool
 	 */
 	public function getPageText( File $image, $page ) {
+		// TODO: It will not be displayed anyway
+		// because we do not have the API to read content of particular page yet	
 		return "dummy";
 	}
 
