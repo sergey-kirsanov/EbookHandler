@@ -350,9 +350,9 @@ class EpubHandler extends ImageHandler {
 		foreach($visible as $f) {
 			
 			if (strpos($f["id"], "ebookhandler", 0) > 0) {
-				$f["id"] = $f["id"].trim("exif_");
+				$f["id"] = $f["id"].trim("exif_").trim("exif-");
 				var_dump($f);
-				print(wfMessage($f["id"])->text());
+				print(wfMessage($f["id"])->text() . "\n");
 				$f["name"] = wfMessage($f["id"])->text();
 			} 
 		}
@@ -361,9 +361,9 @@ class EpubHandler extends ImageHandler {
 		foreach($collapsed as $f) {
 			
 			if (strpos($f["id"], "ebookhandler", 0) > 0) {
-				$f["id"] = $f["id"].trim("exif_");
+				$f["id"] = $f["id"].trim("exif_").trim("exif-");
 				var_dump($f);
-				print(wfMessage($f["id"])->text());
+				print(wfMessage($f["id"])->text() . "\n");
 				$f["name"] = wfMessage($f["id"])->text();
 			} 
 		}
