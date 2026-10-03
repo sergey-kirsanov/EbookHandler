@@ -355,12 +355,15 @@ class EpubHandler extends ImageHandler {
 		// Inherited from MediaHandler.
 		$formatted = $this->formatMetadataHelper( $mergedMetadata, $context );
 
-		var_dump($formatted);
-		
 		// Own formatting to consider our resources
-		foreach($formatted as $f) {
-			$f[0] = wfMessage($f[0]);
+		for($i = 0 ; $i < 2 ; $i++) {
+			$visibleOrCollapsed = $formatted[$i];
+			foreach($visibleOrCollapsed as $f) {
+				$f[0].trim("exif_");
+				$f[1] = wfMessage($f[0]);
+			}
 		}
+
 
 		return $formatted;
 	}
