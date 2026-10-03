@@ -346,21 +346,26 @@ class EpubHandler extends ImageHandler {
 		$formatted = $this->formatMetadataHelper( $mergedMetadata, $context );
 
 		// Own formatting to consider our resources
-		for($i = 0 ; $i < 2 ; $i++) {
-
-			print("I am here");
-			$visibleOrCollapsed = $formatted[$i];
-			var_dump($visibleOrCollapsed);
+		$visible = $formatted["visible"];
+		foreach($visible as $f) {
 			
-			foreach($visibleOrCollapsed as $f) {
-				
-				if (strpos($f["id"], "ebookhandler", 0) > 0) {
-					$f["id"] = $f["id"].trim("exif_");
-					var_dump($f);
-					print(wfMessage($f["id"])->text());
-					$f["name"] = wfMessage($f["id"])->text();
-				} 
-			}
+			if (strpos($f["id"], "ebookhandler", 0) > 0) {
+				$f["id"] = $f["id"].trim("exif_");
+				var_dump($f);
+				print(wfMessage($f["id"])->text());
+				$f["name"] = wfMessage($f["id"])->text();
+			} 
+		}
+
+		$collapsed = $formatted["collapsed"];
+		foreach($collapsed as $f) {
+			
+			if (strpos($f["id"], "ebookhandler", 0) > 0) {
+				$f["id"] = $f["id"].trim("exif_");
+				var_dump($f);
+				print(wfMessage($f["id"])->text());
+				$f["name"] = wfMessage($f["id"])->text();
+			} 
 		}
 
 		var_dump($formatted);
