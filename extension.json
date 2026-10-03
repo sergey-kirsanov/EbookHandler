@@ -37,7 +37,7 @@
 		}
 	},
 	"MediaHandlers": {
-		"application/epub+zip": "MediaWiki\\Extension\\EpubHandler\\EbupHandler"
+		"application/epub+zip": "MediaWiki\\Extension\\EpubHandler\\EpubHandler"
 	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\EpubHandler\\": "includes/"
