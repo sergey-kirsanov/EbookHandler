@@ -16,5 +16,5 @@
 	"exif-language" : "Language",
 	"exif-publisher": "Publisher",
 	"exif-publishdate": "Publish date",
-	"exif-identifier": "Book identifier"
+	"Identifier": "Book identifier"
 }
