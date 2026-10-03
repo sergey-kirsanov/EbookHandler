@@ -3,7 +3,7 @@
 	"author": [
 		"Sergey Kirsanov"
 	],
-	"url": "https://www.mediawiki.org/wiki/Extension:EpubHandler",
+	"url": "https://github.com/sergey-kirsanov/EpubHandler",
 	"descriptionmsg": "epub-desc",
 	"license-name": "GPL-2.0-or-later",
 	"type": "media",
@@ -32,10 +32,10 @@
 	"ResourceModules": {
 		"epubhandler.messages": {
 			"messages": [
-				"ebup-file-page-warning",
-				"ebup-file-page-warning-header",
-				"ebup-file-page-warning-info",
-				"ebup-file-page-warning-footer"
+				"epub-file-page-warning",
+				"epub-file-page-warning-header",
+				"epub-file-page-warning-info",
+				"epub-file-page-warning-footer"
 			]
 		}
 	},
