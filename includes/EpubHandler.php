@@ -157,6 +157,8 @@ class EpubHandler extends ImageHandler {
 	public function doTransform( $image, $dstPath, $dstUrl, $params, $flags = 0 ) {
 		global $wgEpubHandlerPostProcessor, $wgEpubHandlerOutputExtension, $wgEpubHandlerJpegQuality;
 
+		print("doTransform");
+		
 		if ( !$this->normaliseParams( $image, $params ) ) {
 			return new TransformParameterError( $params );
 		}
