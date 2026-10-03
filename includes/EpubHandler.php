@@ -220,7 +220,7 @@ class EpubHandler extends ImageHandler {
 		$ebookReader = new EbookReader($srcPath);
 		$image->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
 
-		$tmpFileName = "/tmp/asfadsfsdf.gif";
+		$tmpFileName = "/tmp/asfadsfsdf.jpg";
 		$realTmpFileName = $ebookReader->saveCoverImageAs($tmpFileName);
 
 		var_dump($realTmpFileName);
@@ -306,7 +306,6 @@ class EpubHandler extends ImageHandler {
 		$size = $ebookReader->getCoverSize();
 		$sizes = EpubHandler::getPageSize( $size );
 		if ( $sizes ) {
-			var_dump($sizes);
 			return $sizes + [ 'metadata' => $data ];
 		}
 
@@ -338,6 +337,8 @@ class EpubHandler extends ImageHandler {
 			$magic = MediaWikiServices::getInstance()->getMimeAnalyzer();
 			$mime = $magic->guessTypesForExtension( $wgEpubOutputExtension );
 		}
+		print ("getThumbType");
+		var_dump([ $wgEpubOutputExtension, $mime ]);
 		return [ $wgEpubOutputExtension, $mime ];
 	}
 
@@ -347,9 +348,9 @@ class EpubHandler extends ImageHandler {
 	 */
 	public function isFileMetadataValid( $file ) {
 		$data = $file->getMetadataItems( [ 'mergedMetadata', 'pages' ] );
-		// if ( !isset( $data['pages'] ) ) {
-		// 	return self::METADATA_BAD;
-		// }
+		if ( !isset( $data['pages'] ) ) {
+			return self::METADATA_BAD;
+		}
 
 		if ( !isset( $data['mergedMetadata'] ) ) {
 			return self::METADATA_COMPATIBLE;
@@ -427,6 +428,7 @@ class EpubHandler extends ImageHandler {
 	 * @return bool|mixed
 	 */
 	protected function getDimensionInfo( File $file ) {
+		print("getDimensionInfo");
 		$info = $file->getHandlerState( self::STATE_DIMENSION_INFO );
 		if ( !$info ) {
 			$cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
