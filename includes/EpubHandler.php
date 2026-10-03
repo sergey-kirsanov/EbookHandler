@@ -366,9 +366,7 @@ class EpubHandler extends ImageHandler {
 			if (strpos($f["id"], "ebookhandler", 0) > 0) {
 				$id = $this->sharptrim($f["id"], "exif-");
 				$id = $this->sharptrim($id, "exif_");
-				print("ID=" . $id . "\n");
 				$name = wfMessage($id)->text();
-				$value = $f["value"];
 				$newF = ["id" => $id, "name" => $name, "value" => $value];
 				$newVisible[$i] = $newF;
 			}
@@ -384,9 +382,7 @@ class EpubHandler extends ImageHandler {
 			$f = $collapsed[$i];
 			if (strpos($f["id"], "ebookhandler", 0) > 0) {
 				$id = $this->sharptrim($f["id"], "exif-");
-				print("ID=" . $id . "\n");
 				$id = $this->sharptrim($id, "exif_");
-				print("ID=" . $id . "\n");
 				$name = wfMessage($id)->text();
 				$value = $f["value"];
 				$newF = ["id" => $id, "name" => $name, "value" => $value];
@@ -400,8 +396,6 @@ class EpubHandler extends ImageHandler {
 		$newFormatted = [];
 		$newFormatted = ["visible" => $newVisible, "collapsed" => $newCollapsed];
 		$formatted = $newFormatted;
-
-		var_dump($formatted);
 
 		return $formatted;
 	}
