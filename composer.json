@@ -7,7 +7,7 @@
 		"php-parallel-lint/php-parallel-lint": "1.4.0"
 	},
 	"require": {
-		"lywzx/php-epub": "^0.0.2"
+		"kiwilan/php-ebook": "^3.0.9"
 	},
 	"scripts": {
 		"fix": [

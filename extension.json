@@ -1,59 +1,46 @@
 {
-	"name": "PDF Handler",
+	"name": "EPUB Handler",
 	"author": [
-		"Martin Seidel",
-		"Mike Połtyn"
+		"Sergey Kirsanov"
 	],
-	"url": "https://www.mediawiki.org/wiki/Extension:PdfHandler",
-	"descriptionmsg": "pdf-desc",
+	"url": "https://www.mediawiki.org/wiki/Extension:EpubHandler",
+	"descriptionmsg": "epub-desc",
 	"license-name": "GPL-2.0-or-later",
 	"type": "media",
 	"requires": {
 		"MediaWiki": ">= 1.43"
 	},
 	"config": {
-		"PdfOutputExtension": {
-			"value": "jpg"
-		},
-		"PdfHandlerDpi": {
+		"EpubHandlerDpi": {
 			"value": 150
 		},
-		"PdfPostProcessor": {
+		"EpubHandlerPostProcessor": {
 			"value": "/usr/bin/convert"
 		},
-		"PdfHandlerJpegQuality": {
+		"EpubHandlerJpegQuality": {
 			"value": 95
-		},
-		"PdftoText": {
-			"value": "/usr/bin/pdftotext"
-		},
-		"PdfProcessor": {
-			"value": "/usr/bin/gs"
-		},
-		"PdfInfo": {
-			"value": "/usr/bin/pdfinfo"
 		}
 	},
 	"MessagesDirs": {
-		"PdfHandler": [
+		"EpubHandler": [
 			"i18n"
 		]
 	},
 	"ResourceModules": {
-		"pdfhandler.messages": {
+		"epubhandler.messages": {
 			"messages": [
-				"pdf-file-page-warning",
-				"pdf-file-page-warning-header",
-				"pdf-file-page-warning-info",
-				"pdf-file-page-warning-footer"
+				"ebup-file-page-warning",
+				"ebup-file-page-warning-header",
+				"ebup-file-page-warning-info",
+				"ebup-file-page-warning-footer"
 			]
 		}
 	},
 	"MediaHandlers": {
-		"application/pdf": "MediaWiki\\Extension\\PdfHandler\\PdfHandler"
+		"application/epub+zip": "MediaWiki\\Extension\\EbupHandler\\EbupHandler"
 	},
 	"AutoloadNamespaces": {
-		"MediaWiki\\Extension\\PdfHandler\\": "includes/"
+		"MediaWiki\\Extension\\EpubHandler\\": "includes/"
 	},
 	"manifest_version": 2
 }

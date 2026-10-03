@@ -1,9 +1,10 @@
 <?php
 
-namespace MediaWiki\Extension\PdfHandler;
+namespace MediaWiki\Extension\EpubHandler;
 
 use File;
 use ImageHandler;
+use BitmapMetadataHandler;
 use MediaTransformError;
 use MediaTransformOutput;
 use MediaWiki\Context\IContextSource;
@@ -13,10 +14,10 @@ use ThumbnailImage;
 use TransformParameterError;
 
 /**
- * Copyright © 2007 Martin Seidel (Xarax) <jodeldi@gmx.de>
+ * Copyright © 2026 Sergey Kirsanov <sergey@kirsanov.info>
  *
- * Inspired by djvuhandler from Tim Starling
- * Modified and written by Xarax
+ * Inspired by djvuhandler from Tim Starling and PDfHandler by Xarax
+ * Modified and written by Sergey Kirsanov
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,17 +35,17 @@ use TransformParameterError;
  * http://www.gnu.org/copyleft/gpl.html
  */
 
-class PdfHandler extends ImageHandler {
+class EpubHandler extends ImageHandler {
 	/**
-	 * Keep in sync with pdfhandler.messages in extension.json
+	 * Keep in sync with epubhandler.messages in extension.json
 	 *
 	 * @see getWarningConfig
 	 */
 	private const MESSAGES = [
-		'main' => 'pdf-file-page-warning',
-		'header' => 'pdf-file-page-warning-header',
-		'info' => 'pdf-file-page-warning-info',
-		'footer' => 'pdf-file-page-warning-footer',
+		'main' => 'epub-file-page-warning',
+		'header' => 'epub-file-page-warning-header',
+		'info' => 'epub-file-page-warning-info',
+		'footer' => 'epub-file-page-warning-footer',
 	];
 
 	/**
@@ -53,14 +54,14 @@ class PdfHandler extends ImageHandler {
 	private const LARGE_FILE = 1e7;
 
 	/**
-	 * Key for getHandlerState for value of type PdfImage
+	 * Key for getHandlerState for value of type EbookReader
 	 */
-	private const STATE_PDF_IMAGE = 'pdfImage';
+	private const STATE_EBOOK_READER = 'ebookReader';
 
 	/**
 	 * Key for getHandlerState for dimension info
 	 */
-	private const STATE_DIMENSION_INFO = 'pdfDimensionInfo';
+	private const STATE_DIMENSION_INFO = 'epubDimensionInfo';
 
 	/**
 	 * @param File $file
@@ -162,7 +163,7 @@ class PdfHandler extends ImageHandler {
 	 * @return MediaTransformError|MediaTransformOutput|ThumbnailImage|TransformParameterError
 	 */
 	public function doTransform( $image, $dstPath, $dstUrl, $params, $flags = 0 ) {
-		global $wgPdfProcessor, $wgPdfPostProcessor, $wgPdfHandlerDpi, $wgPdfHandlerJpegQuality;
+		global $wgEpubHandlerPostProcessor, $wgEpubHandlerDpi, $wgEpubHandlerJpegQuality;
 
 		if ( !$this->normaliseParams( $image, $params ) ) {
 			return new TransformParameterError( $params );
@@ -173,7 +174,7 @@ class PdfHandler extends ImageHandler {
 		$page = (int)$params['page'];
 
 		if ( $page > $this->pageCount( $image ) ) {
-			return $this->doThumbError( $width, $height, 'pdf_page_error' );
+			return $this->doThumbError( $width, $height, 'epub_page_error' );
 		}
 
 		if ( $flags & self::TRANSFORM_LATER ) {
@@ -208,31 +209,21 @@ class PdfHandler extends ImageHandler {
 			return $this->doThumbError( $width, $height, 'filemissing' );
 		}
 
-		$cmd = '(' . wfEscapeShellArg(
-			$wgPdfProcessor,
-			"-sDEVICE=jpeg",
-			"-sOutputFile=-",
-			"-sstdout=%stderr",
-			"-dFirstPage={$page}",
-			"-dLastPage={$page}",
-			"-dSAFER",
-			"-r{$wgPdfHandlerDpi}",
-			// CropBox defines the region that the PDF viewer application is expected to display or print.
-			"-dUseCropBox",
-			"-dBATCH",
-			"-dNOPAUSE",
-			"-q",
-			$srcPath
-		);
-		$cmd .= " | " . wfEscapeShellArg(
-			$wgPdfPostProcessor,
+		$ebookReader = new EbookReader($srcPath);
+		$image->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
+
+		$tmpFileName = "/tmp/asfadsfsdf.gif";
+		$ebookReader->saveCoverImageAs($tmpFileName);
+
+		$cmd = wfEscapeShellArg(
+			$wgEpubHandlerPostProcessor,
 			"-depth",
 			"8",
 			"-quality",
-			$wgPdfHandlerJpegQuality,
+			$wgEpubHandlerJpegQuality,
 			"-resize",
-			(string)$width,
-			"-",
+			'"'. (string)$width . 'x"',
+			$tmpFileName,
 			$dstPath
 		);
 		$cmd .= ")";
@@ -240,6 +231,8 @@ class PdfHandler extends ImageHandler {
 		wfDebug( __METHOD__ . ": $cmd\n" );
 		$retval = '';
 		$err = wfShellExecWithStderr( $cmd, $retval );
+
+		unlink($tmpFileName);
 
 		$removed = $this->removeBadFile( $dstPath, $retval );
 
@@ -260,15 +253,15 @@ class PdfHandler extends ImageHandler {
 	/**
 	 * @param \MediaHandlerState $state
 	 * @param string $path
-	 * @return PdfImage
+	 * @return EbookReader
 	 */
-	private function getPdfImage( $state, $path ) {
-		$pdfImg = $state->getHandlerState( self::STATE_PDF_IMAGE );
-		if ( !$pdfImg ) {
-			$pdfImg = new PdfImage( $path );
-			$state->setHandlerState( self::STATE_PDF_IMAGE, $pdfImg );
+	private function getEbookReader( $state, $path ) {
+		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
+		if ( !$ebookReader ) {
+			$ebookReader = new EbookReader($path);
+			$state->setHandlerState( self::STATE_EBOOK_READER, $ebookReader );
 		}
-		return $pdfImg;
+		return $ebookReader;
 	}
 
 	/**
@@ -277,13 +270,35 @@ class PdfHandler extends ImageHandler {
 	 * @return array|bool
 	 */
 	public function getSizeAndMetadata( $state, $path ) {
-		$metadata = $this->getPdfImage( $state, $path )->retrieveMetaData();
-		$sizes = PdfImage::getPageSize( $metadata, 1 );
+		$ebookReader = $this->getEbookReader( $state, $path );
+		$metadata = $ebookReader->GetMetadata();
+
+		$meta = new BitmapMetadataHandler();
+		$meta->addMetadata( $metadata, 'native' );
+		$data = [];
+		$data['mergedMetadata'] = $meta->getMetadataArray();
+
+		$tmpFilePath = "/tmp/asfasfasf.png";
+		$coverPath = $ebookReader->saveCoverImageAs($tmpFilePath);
+		unlink($coverPath);
+		$size = $ebookReader->getCoverSize();
+		$sizes = EpubHandler::getPageSize( $size );
 		if ( $sizes ) {
-			return $sizes + [ 'metadata' => $metadata ];
+			return $sizes + [ 'metadata' => $data ];
 		}
 
 		return [ 'metadata' => $metadata ];
+	}
+
+	private static function getPageSize( $size ) {
+		global $wgEpubHandlerDpi;
+
+			$width  = intval($size[0] / 72 * $wgEpubHandlerDpi );
+			$height = intval($size[1] / 72 * $wgEpubHandlerDpi );
+			return [
+				'width' => $width,
+				'height' => $height
+			];
 	}
 
 	/**
@@ -293,14 +308,14 @@ class PdfHandler extends ImageHandler {
 	 * @return array
 	 */
 	public function getThumbType( $ext, $mime, $params = null ) {
-		global $wgPdfOutputExtension;
+		global $wgEpubOutputExtension;
 		static $mime;
 
 		if ( !isset( $mime ) ) {
 			$magic = MediaWikiServices::getInstance()->getMimeAnalyzer();
-			$mime = $magic->guessTypesForExtension( $wgPdfOutputExtension );
+			$mime = $magic->guessTypesForExtension( $wgEpubOutputExtension );
 		}
-		return [ $wgPdfOutputExtension, $mime ];
+		return [ $wgEpubOutputExtension, $mime ];
 	}
 
 	/**
@@ -309,9 +324,9 @@ class PdfHandler extends ImageHandler {
 	 */
 	public function isFileMetadataValid( $file ) {
 		$data = $file->getMetadataItems( [ 'mergedMetadata', 'pages' ] );
-		if ( !isset( $data['pages'] ) ) {
-			return self::METADATA_BAD;
-		}
+		// if ( !isset( $data['pages'] ) ) {
+		// 	return self::METADATA_BAD;
+		// }
 
 		if ( !isset( $data['mergedMetadata'] ) ) {
 			return self::METADATA_COMPATIBLE;
@@ -364,9 +379,7 @@ class PdfHandler extends ImageHandler {
 	 * @return bool|int
 	 */
 	public function pageCount( File $image ) {
-		$info = $this->getDimensionInfo( $image );
-
-		return $info ? $info['pageCount'] : false;
+		return 1;
 	}
 
 	/**
@@ -395,21 +408,19 @@ class PdfHandler extends ImageHandler {
 		if ( !$info ) {
 			$cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
 			$info = $cache->getWithSetCallback(
-				$cache->makeKey( 'file-pdf-dimensions', $file->getSha1() ),
+				$cache->makeKey( 'file-epub-dimensions', $file->getSha1() ),
 				$cache::TTL_MONTH,
 				static function () use ( $file ) {
-					$data = $file->getMetadataItems( PdfImage::ITEMS_FOR_PAGE_SIZE );
-					if ( !$data || !isset( $data['Pages'] ) ) {
-						return false;
-					}
+
+					$ebookReader = $file->getHandlerState(self::STATE_EBOOK_READER);
 
 					$dimsByPage = [];
-					$count = intval( $data['Pages'] );
+					$count = 1;
 					for ( $i = 1; $i <= $count; $i++ ) {
-						$dimsByPage[$i] = PdfImage::getPageSize( $data, $i );
+						$dimsByPage[$i] = $ebookReader->getPageSize();
 					}
 
-					return [ 'pageCount' => $count, 'dimensionsByPage' => $dimsByPage ];
+					return [ 'pageCount' => 1, 'dimensionsByPage' => $dimsByPage ];
 				}
 			);
 		}
@@ -423,11 +434,7 @@ class PdfHandler extends ImageHandler {
 	 * @return bool
 	 */
 	public function getPageText( File $image, $page ) {
-		$pageTexts = $image->getMetadataItem( 'text' );
-		if ( !is_array( $pageTexts ) || !isset( $pageTexts[$page - 1] ) ) {
-			return false;
-		}
-		return $pageTexts[$page - 1];
+		return false;
 	}
 
 	/**
@@ -440,7 +447,7 @@ class PdfHandler extends ImageHandler {
 		return [
 			'messages' => self::MESSAGES,
 			'link' => '//www.mediawiki.org/wiki/Special:MyLanguage/Help:Security/PDF_files',
-			'module' => 'pdfhandler.messages',
+			'module' => 'epubhandler.messages',
 		];
 	}
 
