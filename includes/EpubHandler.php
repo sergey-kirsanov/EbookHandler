@@ -348,6 +348,7 @@ class EpubHandler extends ImageHandler {
 		// Own formatting to consider our resources
 		for($i = 0 ; $i < 2 ; $i++) {
 
+			print("I am here");
 			$visibleOrCollapsed = $formatted[$i];
 			foreach($visibleOrCollapsed as $f) {
 				
