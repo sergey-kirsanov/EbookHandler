@@ -339,8 +339,6 @@ class EpubHandler extends ImageHandler {
 			$magic = MediaWikiServices::getInstance()->getMimeAnalyzer();
 			$mime = $magic->guessTypesForExtension( $wgEpubHandlerOutputExtension );
 		}
-		print ("getThumbType");
-		var_dump([ $wgEpubHandlerOutputExtension, $mime ]);
 		return [ $wgEpubHandlerOutputExtension, $mime ];
 	}
 
