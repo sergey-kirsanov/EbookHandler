@@ -416,10 +416,11 @@ class EpubHandler extends ImageHandler {
 
 					$dimsByPage = [];
 					$count = 1;
-					for ( $i = 1; $i <= $count; $i++ ) {
-						$dimsByPage[$i] = $ebookReader->getPageSize();
+					if ( $ebookReader ) {
+						for ( $i = 1; $i <= $count; $i++ ) {
+							$dimsByPage[$i] = $ebookReader->getPageSize();
+						}
 					}
-
 					return [ 'pageCount' => 1, 'dimensionsByPage' => $dimsByPage ];
 				}
 			);
