@@ -365,7 +365,7 @@ class EpubHandler extends ImageHandler {
 
 		$collapsed = $formatted["collapsed"];
 		$newCollapsed = [];
-		for($i = 0; $i < count($$collapsed); $i++) {
+		for($i = 0; $i < count($collapsed); $i++) {
 			
 			$f = $$collapsed[$i];
 			if (strpos($f["id"], "ebookhandler", 0) > 0) {
