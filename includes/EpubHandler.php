@@ -462,18 +462,8 @@ class EpubHandler extends ImageHandler {
 		return "dummy";
 	}
 
-	/**
-	 * Adds a warning about PDFs being potentially dangerous to the file
-	 * page. Multiple messages with this base will be used.
-	 * @param File $file
-	 * @return array
-	 */
 	public function getWarningConfig( $file ) {
-		return [
-			'messages' => self::MESSAGES,
-			'link' => '//www.mediawiki.org/wiki/Special:MyLanguage/Help:Security/PDF_files',
-			'module' => 'epubhandler.messages',
-		];
+		return null;
 	}
 
 	public function useSplitMetadata() {
