@@ -358,8 +358,12 @@ class EpubHandler extends ImageHandler {
 			return false;
 		}
 
+		foreach($mergedMetadata as $key => $val){
+			$key = wfMessage( $key )->inContentLanguage()->text();
+		}
+
 		// Inherited from MediaHandler.
-		return $this->formatMetadataHelper( $mergedMetadata, $context );
+		//return $this->formatMetadataHelper( $mergedMetadata, $context );
 	}
 
 	/** @inheritDoc */
@@ -381,6 +385,7 @@ class EpubHandler extends ImageHandler {
 			default:
 				break;
 		}
+
 		// Use default formatting
 		return false;
 	}
