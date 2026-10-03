@@ -395,7 +395,7 @@ class EpubHandler extends ImageHandler {
 	 * @return bool|int
 	 */
 	public function pageCount( File $image ) {
-		return 2;
+		return 1;
 	}
 
 	/**
@@ -455,7 +455,7 @@ class EpubHandler extends ImageHandler {
 	 * @return bool
 	 */
 	public function getPageText( File $image, $page ) {
-		return "test";
+		return "dummy";
 	}
 
 	/**
