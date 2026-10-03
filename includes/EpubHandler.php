@@ -259,7 +259,7 @@ class EpubHandler extends ImageHandler {
 			var_dump($ext );
 			var_dump($path);
 			// if ($ext == "") { // This could happen when we just uploading the file and its name has no extension yet
-			// 	//TODO: Do somethibng with it
+			// 	//TODO: Do something with it
 			// 	return null;
 			// }
 
@@ -423,7 +423,7 @@ class EpubHandler extends ImageHandler {
 	 * @return bool|int
 	 */
 	public function pageCount( File $image ) {
-		// TODO: For the time being (we do not API to get also pages separately from e-book)
+		// TODO: For the time being (we do not have API to get also pages separately from e-book)
 		// so we limit to one page
 		return 1;
 	}
@@ -459,20 +459,24 @@ class EpubHandler extends ImageHandler {
 				static function () use ( $file ) {
 
 					$ebookReader = $file->getHandlerState(self::STATE_EBOOK_READER);
+					if ( $ebookReader == null ) {
+						$ebookReader = new EbookReader($file->getName());
+						$file->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
+					}
 
 					$dimsByPage = [];
-					// TODO: For the time being (we do not API to get also pages separately from e-book)
+					// TODO: For the time being (we do not have API to get also pages separately from e-book)
 					// so we limit to one page
 					$count = 1;
 					
 						for ( $i = 1; $i <= $count; $i++ ) {
 							if ( $ebookReader ) {
-								// TODO: For the time being (we do not API to get also pages separately from e-book)
-								// so ve use cover size
+								// TODO: For the time being (we do not have API to get also pages separately from e-book)
+								// so we use cover size
 								$dimsByPage[$i] = $ebookReader->getCoverSize();
 							}
 							else {
-								// It can be so that this code called before  $ebookReader is
+								// It can be so that this code called before $ebookReader is
 								// initialized and put to state
 								$dimsByPage[$i] = self::getPageSize([1000,1000]);
 							}
