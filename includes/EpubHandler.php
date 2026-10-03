@@ -158,7 +158,7 @@ class EpubHandler extends ImageHandler {
 		global $wgEpubHandlerPostProcessor, $wgEpubHandlerOutputExtension, $wgEpubHandlerJpegQuality;
 
 		print("doTransform");
-		
+
 		if ( !$this->normaliseParams( $image, $params ) ) {
 			return new TransformParameterError( $params );
 		}
@@ -259,7 +259,8 @@ class EpubHandler extends ImageHandler {
 		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
 		if ( !$ebookReader != null ) {
 			$ext = pathinfo($path, FILEINFO_EXTENSION);
-
+			var_dump($path);
+			var_dump($ext);
 			if ($ext == "") { // This could happen when we just uploading the file and its name has no extension yet
 				//TODO: Do somethibng with it
 				return null;
