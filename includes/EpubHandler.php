@@ -353,7 +353,14 @@ class EpubHandler extends ImageHandler {
 		}
 
 		// Inherited from MediaHandler.
-		return $this->formatMetadataHelper( $mergedMetadata, $context );
+		$formatted = $this->formatMetadataHelper( $mergedMetadata, $context );
+
+		// Own formatting to consider our resources
+		foreach($formatted as $f) {
+			$f[1] = wfMessage($f[0]);
+		}
+
+		return $formatted;
 	}
 
 	/** @inheritDoc */
