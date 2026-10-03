@@ -196,7 +196,7 @@ class EpubHandler extends ImageHandler {
 		}
 
 		print("4\n");
-		
+
 		// Thumbnail extraction is very inefficient for large files.
 		// Provide a way to pool count limit the number of downloaders.
 		if ( $image->getSize() >= self::LARGE_FILE ) {
@@ -295,8 +295,8 @@ class EpubHandler extends ImageHandler {
 
 		$meta = new BitmapMetadataHandler();
 		$meta->addMetadata( $metadata, 'native' );
-		$data = $meta->getMetadataArray();
-		//$data['mergedMetadata'] = $meta->getMetadataArray();
+		$data = [];
+		$data['mergedMetadata'] = $meta->getMetadataArray();
 
 		$tmpFilePath = "/tmp/asfasfasf.png";
 		$coverPath = $ebookReader->saveCoverImageAs($tmpFilePath);
@@ -306,10 +306,11 @@ class EpubHandler extends ImageHandler {
 		$size = $ebookReader->getCoverSize();
 		$sizes = EpubHandler::getPageSize( $size );
 		if ( $sizes ) {
+			var_dump($sizes);
 			return $sizes + [ 'metadata' => $data ];
 		}
 
-		return [ 'metadata' => $metadata ];
+		return [ 'metadata' => $data ];
 	}
 
 	private static function getPageSize( $size ) {
