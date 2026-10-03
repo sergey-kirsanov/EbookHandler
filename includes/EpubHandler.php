@@ -215,6 +215,8 @@ class EpubHandler extends ImageHandler {
 		$tmpFileName = "/tmp/asfadsfsdf.gif";
 		$realTmpFileName = $ebookReader->saveCoverImageAs($tmpFileName);
 
+		var_dump($realTmpFileName);
+		
 		if ( $realTmpFileName == null ) {
 			$err = sprintf( 'thumbnail failed on %s: image %s does not have cover "',
 				wfHostname(), $image->getName() );
@@ -244,11 +246,14 @@ class EpubHandler extends ImageHandler {
 		$removed = $this->removeBadFile( $dstPath, $retval );
 
 		if ( $retval != 0 || $removed ) {
+			print("Bad thumb file");
 			wfDebugLog( 'thumbnail',
 				sprintf( 'thumbnail failed on %s: error %d "%s" from "%s"',
 				wfHostname(), $retval, trim( $err ), $cmd ) );
 			return new MediaTransformError( 'thumbnail_error', $width, $height, $err );
 		}
+
+		sleep(5);
 
 		return new ThumbnailImage( $image, $dstUrl, $dstPath, [
 			'width' => $width,
@@ -282,8 +287,8 @@ class EpubHandler extends ImageHandler {
 
 		$meta = new BitmapMetadataHandler();
 		$meta->addMetadata( $metadata, 'native' );
-		$data = [];
-		$data['mergedMetadata'] = $meta->getMetadataArray();
+		$data = $meta->getMetadataArray();
+		//$data['mergedMetadata'] = $meta->getMetadataArray();
 
 		$tmpFilePath = "/tmp/asfasfasf.png";
 		$coverPath = $ebookReader->saveCoverImageAs($tmpFilePath);
