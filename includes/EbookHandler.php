@@ -386,6 +386,8 @@ abstract class EbookHandler extends ImageHandler {
 		// Inherited from MediaHandler.
 		$formatted = $this->formatMetadataHelper( $mergedMetadata, $context );
 
+		var_dump($formatted);
+
 		return $formatted;
 	}
 
