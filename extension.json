@@ -31,9 +31,9 @@
 		]
 	},
 	"MediaHandlers": {
-		"application/epub+zip": "MediaWiki\\Extension\\EpubHandler\\formats\\EpubHandler",
-		"application/x-fictionbook+xml": "MediaWiki\\Extension\\EpubHandler\\formats\\Fb2Handler",
-		"application/x-mobipocket-ebook": "MediaWiki\\Extension\\EpubHandler\\formats\\MobiHandler"
+		"application/epub+zip": "MediaWiki\\Extension\\EbookHandler\\formats\\EpubHandler",
+		"application/x-fictionbook+xml": "MediaWiki\\Extension\\EbookHandler\\formats\\Fb2Handler",
+		"application/x-mobipocket-ebook": "MediaWiki\\Extension\\EbookHandler\\formats\\MobiHandler"
 	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\EbookHandler\\": "includes/"
