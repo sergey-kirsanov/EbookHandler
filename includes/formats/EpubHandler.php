@@ -15,7 +15,17 @@ class EpubHandler extends EbookHandler {
 		
 		$ebookReader = null;	
 
-		$ebookReader = new EbookReader($path);
+		$ext = pathinfo($path, PATHINFO_EXTENSION);
+		if ( $ext == "" ) {
+			$tmpFile = $path . '.epub';
+			copy($path, $tmpFile);
+			$ebookReader = new EbookReader($tmpFile);
+			unlink($tmpFile);
+		}
+		else {
+			$ebookReader = new EbookReader($path);
+		}
+
 		$state->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
 
 		return $ebookReader;
