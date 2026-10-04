@@ -360,9 +360,6 @@ abstract class EbookHandler extends ImageHandler {
 	 */
 	public function isFileMetadataValid( $file ) {
 		$data = $file->getMetadataItems( [ 'mergedMetadata', 'pages' ] );
-		if ( !isset( $data['pages'] ) ) {
-			return self::METADATA_BAD;
-		}
 
 		if ( !isset( $data['mergedMetadata'] ) ) {
 			return self::METADATA_COMPATIBLE;
