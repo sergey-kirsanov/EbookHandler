@@ -209,7 +209,7 @@ class EbookHandler extends ImageHandler {
 			$err = sprintf( 'thumbnail failed on %s: image %s does not have cover "',
 				wfHostname(), $image->getName() );
 			wfDebugLog( 'thumbnail', $err);
-			return new MediaTransformError( 'ebookhandler-no-cover', 0, 0 );
+			return new MediaTransformError( 'ebookhandler-no-cover', 100, 50 );
 		}
 
 		$cmd = wfEscapeShellArg(
