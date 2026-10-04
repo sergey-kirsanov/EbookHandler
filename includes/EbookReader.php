@@ -42,11 +42,6 @@ class EbookReader {
             return null;
         }
 
-        $coverImagePath = $coverImage->getPath();
-        if ($coverImagePath == null) {
-            return null;
-        }
-
         if ($coverImage->saveTo($coverFilePath)){
              return $coverFilePath;
         }
