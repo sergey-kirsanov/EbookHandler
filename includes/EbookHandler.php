@@ -297,9 +297,7 @@ abstract class EbookHandler extends ImageHandler {
 	 * @param string $path
 	 * @return EbookReader|null
 	 */
-	protected function createEbookReader(string $path): ?EbookReader {
-		return null;
-	}
+	abstract protected function createEbookReader(string $path): ?EbookReader;
 
 	/**
 	 * @param \MediaHandlerState $state
@@ -308,6 +306,10 @@ abstract class EbookHandler extends ImageHandler {
 	 */
 	public function getSizeAndMetadata( $state, $path ) {
 		$ebookReader = $this->getEbookReader( $state, $path );
+		if ($ebookReader == null) {
+			return [];
+		}
+
 		$metadata = $ebookReader->GetMetadata();
 
 		$meta = new BitmapMetadataHandler();
@@ -369,18 +371,6 @@ abstract class EbookHandler extends ImageHandler {
 		return self::METADATA_GOOD;
 	}
 
-	private function sharptrim(string $str, string $patt) {
-		$i = strpos($str, $patt);
-		if ($i === 0) {
-			$str = substr($str, strlen($patt), strlen($str) - strlen($patt)); 
-		}
-		$i = strpos($str, $patt);
-		if ($i === strlen($str) - strlen($patt)) {
-			$str = substr($str, 0, strlen($str) - strlen($patt)); 
-		}
-		return $str;
-	}
-
 	/**
 	 * @param File $image
 	 * @param bool|IContextSource $context Context to use (optional)
@@ -395,47 +385,6 @@ abstract class EbookHandler extends ImageHandler {
 
 		// Inherited from MediaHandler.
 		$formatted = $this->formatMetadataHelper( $mergedMetadata, $context );
-
-		// Own formatting to consider our resources
-		$visible = $formatted["visible"];
-		$newVisible = [];
-		for($i = 0; $i < count($visible); $i++) {
-			
-			$f = $visible[$i];
-			if (strpos($f["id"], "ebookhandler", 0) > 0) {
-				$id = $this->sharptrim($f["id"], "exif-");
-				$id = $this->sharptrim($id, "exif_");
-				$name = wfMessage($id)->text();
-				$value = $f["value"];
-				$newF = ["id" => $id, "name" => $name, "value" => $value];
-				$newVisible[$i] = $newF;
-			}
-			else{
-				$newVisible[$i] = $f;
-			}
-		}
-
-		$collapsed = $formatted["collapsed"];
-		$newCollapsed = [];
-		for($i = 0; $i < count($collapsed); $i++) {
-			
-			$f = $collapsed[$i];
-			if (strpos($f["id"], "ebookhandler", 0) > 0) {
-				$id = $this->sharptrim($f["id"], "exif-");
-				$id = $this->sharptrim($id, "exif_");
-				$name = wfMessage($id)->text();
-				$value = $f["value"];
-				$newF = ["id" => $id, "name" => $name, "value" => $value];
-				$newCollapsed[$i] = $newF;
-			}
-			else{
-				$newCollapsed[$i] = $f;
-			}
-		}
-
-		$newFormatted = [];
-		$newFormatted = ["visible" => $newVisible, "collapsed" => $newCollapsed];
-		$formatted = $newFormatted;
 
 		return $formatted;
 	}
