@@ -6,13 +6,13 @@
 	"ebookhandler-no-cover": "Не могу получить обложку из файла.",
 	"ebookhandler-no-metadata": "Не могу получить метаданные из файла.",
 	"ebookhandler-page-error": "Номер страницы вне допустимого диапазона.",
-	"ebookhandler-title": "Название книги",
-	"ebookhandler-description": "Описание",
-	"ebookhandler-author": "Автор",
-	"ebookhandler-createdat": "Дата создания файла",
-	"ebookhandler-language" : "Язык книги",
-	"ebookhandler-publisher": "Издатель",
-	"ebookhandler-publishdate": "Дата издания",
-	"ebookhandler-identifier": "Идентификатор",
-	"ebookhandler-copyright": "Права"
+	"exif-ebookhandler-title": "Название книги",
+	"exif-ebookhandler-description": "Описание",
+	"exif-ebookhandler-author": "Автор",
+	"exif-ebookhandler-createdat": "Дата создания файла",
+	"exif-ebookhandler-language" : "Язык книги",
+	"exif-ebookhandler-publisher": "Издатель",
+	"exif-ebookhandler-publishdate": "Дата издания",
+	"exif-ebookhandler-identifier": "Идентификатор",
+	"exif-ebookhandler-copyright": "Права"
 }
