@@ -3,8 +3,7 @@
 require_once("../vendor/autoload.php");
 require_once( "../includes/EbookReader.php");
 
-use MediaWiki\Extension\EpubHandler\EbookReader;
-use MediaWiki\ResourceLoader\FilePath;
+use MediaWiki\Extension\EbookHandler\EbookReader;
 
 $reader = new EbookReader(__DIR__ . '/alice-lewis-carroll.mobi');
 

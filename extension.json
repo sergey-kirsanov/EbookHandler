@@ -1,10 +1,10 @@
 {
-	"name": "EPUB Handler",
+	"name": "EBOOK Handler",
 	"version": "1.0.0",
 	"author": [
 		"Sergey Kirsanov"
 	],
-	"url": "https://github.com/sergey-kirsanov/EpubHandler",
+	"url": "https://github.com/sergey-kirsanov/EbookHandler",
 	"descriptionmsg": "ebookhandler-desc",
 	"license-name": "GPL-2.0-or-later",
 	"type": "media",
@@ -12,16 +12,16 @@
 		"MediaWiki": ">= 1.43"
 	},
 	"config": {
-		"EpubHandlerOutputExtension": {
+		"EbookHandlerOutputExtension": {
 			"value": "jpg"
 		},
-		"EpubHandlerDpi": {
+		"EbookHandlerDpi": {
 			"value": 150
 		},
-		"EpubHandlerPostProcessor": {
+		"EbookHandlerPostProcessor": {
 			"value": "/usr/bin/convert"
 		},
-		"EpubHandlerJpegQuality": {
+		"EbookHandlerJpegQuality": {
 			"value": 95
 		}
 	},
@@ -31,12 +31,12 @@
 		]
 	},
 	"MediaHandlers": {
-		"application/epub+zip": "MediaWiki\\Extension\\EpubHandler\\EpubHandler",
-		"application/x-fictionbook+xml": "MediaWiki\\Extension\\EpubHandler\\EpubHandler",
-		"application/x-mobipocket-ebook": "MediaWiki\\Extension\\EpubHandler\\EpubHandler"
+		"application/epub+zip": "MediaWiki\\Extension\\EpubHandler\\formats\\EpubHandler",
+		"application/x-fictionbook+xml": "MediaWiki\\Extension\\EpubHandler\\formats\\Fb2Handler",
+		"application/x-mobipocket-ebook": "MediaWiki\\Extension\\EpubHandler\\formats\\MobiHandler"
 	},
 	"AutoloadNamespaces": {
-		"MediaWiki\\Extension\\EpubHandler\\": "includes/"
+		"MediaWiki\\Extension\\EbookHandler\\": "includes/"
 	},
 	"manifest_version": 2
 }

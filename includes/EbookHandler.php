@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\EpubHandler;
+namespace MediaWiki\Extension\EbookHandler;
 
 use File;
 use ImageHandler;
@@ -35,7 +35,7 @@ use TransformParameterError;
  * http://www.gnu.org/copyleft/gpl.html
  */
 
-class EpubHandler extends ImageHandler {
+class EbookHandler extends ImageHandler {
 
 	/**
 	 * 10MB is considered a large file
@@ -45,12 +45,12 @@ class EpubHandler extends ImageHandler {
 	/**
 	 * Key for getHandlerState for value of type EbookReader
 	 */
-	private const STATE_EBOOK_READER = 'ebookReader';
+	protected const STATE_EBOOK_READER = 'ebookReader';
 
 	/**
 	 * Key for getHandlerState for dimension info
 	 */
-	private const STATE_DIMENSION_INFO = 'epubDimensionInfo';
+	private const STATE_DIMENSION_INFO = 'ebookDimensionInfo';
 
 	/**
 	 * @param File $file
@@ -154,7 +154,7 @@ class EpubHandler extends ImageHandler {
 	 * @return MediaTransformError|MediaTransformOutput|ThumbnailImage|TransformParameterError
 	 */
 	public function doTransform( $image, $dstPath, $dstUrl, $params, $flags = 0 ) {
-		global $wgEpubHandlerPostProcessor, $wgEpubHandlerOutputExtension, $wgEpubHandlerJpegQuality;
+		global $wgEbookHandlerPostProcessor, $wgEbookHandlerOutputExtension, $wgEbookHandlerJpegQuality;
 
 		if ( !$this->normaliseParams( $image, $params ) ) {
 			return new TransformParameterError( $params );
@@ -213,13 +213,13 @@ class EpubHandler extends ImageHandler {
 		}
 
 		$cmd = wfEscapeShellArg(
-			$wgEpubHandlerPostProcessor,
+			$wgEbookHandlerPostProcessor,
 			"-depth",
 			"8",
 			"-quality",
-			$wgEpubHandlerJpegQuality,
+			$wgEbookHandlerJpegQuality,
 			"-format",
-			$wgEpubHandlerOutputExtension,
+			$wgEbookHandlerOutputExtension,
 			"-resize",
 			(string)$width,
 			$dstPath,
@@ -262,7 +262,7 @@ class EpubHandler extends ImageHandler {
 		return $ebookReader;
 	}
 
-	private function createEbookReader(File $file): ?EbookReader {
+	private function createEbookReaderForFile(File $file): ?EbookReader {
 		
 		$ebookReader = null;	
 
@@ -278,9 +278,9 @@ class EpubHandler extends ImageHandler {
 	/**
 	 * @param \MediaHandlerState $state
 	 * @param string $path
-	 * @return EbookReader
+	 * @return EbookReader|null
 	 */
-	private function createEbookReader2($state, string $path): ?EbookReader {
+	protected function createEbookReader($state, string $path): ?EbookReader {
 		
 		$ebookReader = null;	
 
@@ -314,10 +314,10 @@ class EpubHandler extends ImageHandler {
 	}
 
 	private static function getPageSize( $size ) {
-		global $wgEpubHandlerDpi;
+		global $wgEbookHandlerDpi;
 
-			$width  = intval($size[0] / 72 * $wgEpubHandlerDpi );
-			$height = intval($size[1] / 72 * $wgEpubHandlerDpi );
+			$width  = intval($size[0] / 72 * $wgEbookHandlerDpi );
+			$height = intval($size[1] / 72 * $wgEbookHandlerDpi );
 			return [
 				'width' => $width,
 				'height' => $height
@@ -331,14 +331,14 @@ class EpubHandler extends ImageHandler {
 	 * @return array
 	 */
 	public function getThumbType( $ext, $mime, $params = null ) {
-		global $wgEpubHandlerOutputExtension;
+		global $wgEbookHandlerOutputExtension;
 		static $mime;
 
 		if ( !isset( $mime ) ) {
 			$magic = MediaWikiServices::getInstance()->getMimeAnalyzer();
-			$mime = $magic->guessTypesForExtension( $wgEpubHandlerOutputExtension );
+			$mime = $magic->guessTypesForExtension( $wgEbookHandlerOutputExtension );
 		}
-		return [ $wgEpubHandlerOutputExtension, $mime ];
+		return [ $wgEbookHandlerOutputExtension, $mime ];
 	}
 
 	/**

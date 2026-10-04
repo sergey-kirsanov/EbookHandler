@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\EpubHandler;
+namespace MediaWiki\Extension\EbookHandler;
 
 use Kiwilan\Ebook\Ebook;
 
@@ -11,19 +11,19 @@ class EbookReader {
     private array $mCoverSize = [0, 0];
     
     /**
-	 * @param string $epubFilePath
+	 * @param string $ebookFilePath
 	 */
-	public function __construct( $epubFilePath ) {
-		$this->read($epubFilePath);
+	public function __construct( $ebookFilePath ) {
+		$this->read($ebookFilePath);
 	}
 
-    private function read(string $epubFilePath) {
+    private function read(string $ebookFilePath) {
         
-        if (!Ebook::isValid($epubFilePath)) {
+        if (!Ebook::isValid($ebookFilePath)) {
             return;
         }    
         
-        $this->mBook = Ebook::read($epubFilePath);
+        $this->mBook = Ebook::read($ebookFilePath);
 
         if ($this->mBook->hasCover()) {
             $imageSize = getimagesizefromstring($this->mBook->getCover()->getContents());

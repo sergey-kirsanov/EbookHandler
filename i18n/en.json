@@ -2,8 +2,8 @@
 	"@metadata": {
 		"authors": []
 	},
-	"ebookhandler-desc": "Handler for pre-viewing EPUB files in image mode - gets cover and its thumbnail and metadata",
-	"ebookhandler-no-metadata": "Cannot get metadata from EPUB.",
+	"ebookhandler-desc": "Handler for pre-viewing EPUB, FB2 and MOBI files in image mode - gets cover and its thumbnail and metadata",
+	"ebookhandler-no-metadata": "Cannot get metadata from file.",
 	"ebookhandler-page-error": "Page number not in range.",
 	"ebookhandler-title": "E-Book title",
 	"ebookhandler-description": "Description",
