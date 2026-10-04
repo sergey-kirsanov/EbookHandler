@@ -12,10 +12,6 @@ class Fb2Handler extends EbookHandler {
 	 */
 	protected function createEbookReader(string $path): ?EbookReader {
 		
-		$ebookReader = null;	
-
-		$ebookReader = new EbookReader($path);
-
-		return $ebookReader;
+		return EbookHandler::createEbookReaderForFileWithExt($path, "fb2");
 	}
 }

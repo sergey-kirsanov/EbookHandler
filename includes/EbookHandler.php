@@ -275,6 +275,24 @@ abstract class EbookHandler extends ImageHandler {
 		return $ebookReader;
 	}
 
+	protected function createEbookReaderForFileWithExt(string $path, string $actualExt) {
+		$ebookReader = null;	
+
+		$ext = pathinfo($path, PATHINFO_EXTENSION);
+		if ( $ext === "" ) {
+			$tmpFile = $path . '.' . $actualExt;
+			if (copy($path, $tmpFile)) {
+				$ebookReader = new EbookReader($tmpFile);
+				unlink($tmpFile);
+			}
+		}
+		else {
+			$ebookReader = new EbookReader($path);
+		}
+
+		return $ebookReader;
+	}
+
 	/**
 	 * @param string $path
 	 * @return EbookReader|null

@@ -12,10 +12,7 @@ class MobiHandler extends EbookHandler {
 	 */
 	protected function createEbookReader(string $path): ?EbookReader {
 		
-		$ebookReader = null;	
+		return EbookHandler::createEbookReaderForFileWithExt($path, "mobi");
 
-		$ebookReader = new EbookReader($path);
-
-		return $ebookReader;
 	}
 }
