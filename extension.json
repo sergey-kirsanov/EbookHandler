@@ -36,7 +36,8 @@
 		"application/x-mobipocket-ebook": "MediaWiki\\Extension\\EbookHandler\\formats\\MobiHandler"
 	},
 	"AutoloadNamespaces": {
-		"MediaWiki\\Extension\\EbookHandler\\": "includes/"
+		"MediaWiki\\Extension\\EbookHandler\\": "includes/",
+		"MediaWiki\\Extension\\EbookHandler\\formats": "includes/formats"
 	},
 	"manifest_version": 2
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace MediaWiki\Extension\EbookHandler\formats;
+
 use MediaWiki\Extension\EbookHandler\EbookHandler;
 use MediaWiki\Extension\EbookHandler\EbookReader;
 
