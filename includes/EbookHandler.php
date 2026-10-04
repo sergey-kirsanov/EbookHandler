@@ -204,8 +204,9 @@ class EbookHandler extends ImageHandler {
 		$image->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
 
 		$realTmpFileName = $ebookReader->saveCoverImageAs($dstPath);
+		$fileSize = filesize($realTmpFileName);
 
-		if ( $realTmpFileName == null ) {
+		if ( $realTmpFileName == null || $fileSize == 0) {
 			$err = sprintf( 'thumbnail failed on %s: image %s does not have cover "',
 				wfHostname(), $image->getName() );
 			wfDebugLog( 'thumbnail', $err);
