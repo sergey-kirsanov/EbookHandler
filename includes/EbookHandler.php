@@ -200,7 +200,6 @@ abstract class EbookHandler extends ImageHandler {
 			return $this->doThumbError( $width, $height, 'filemissing' );
 		}
 
-		var_dump($srcPath);
 		$ebookReader = new EbookReader($srcPath);
 		$image->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
 
@@ -283,8 +282,7 @@ abstract class EbookHandler extends ImageHandler {
 		if ( $ext === "" ) {
 			$tmpFile = $path . '.' . $actualExt;
 			if (copy($path, $tmpFile)) {
-				$ebookReader = new EbookReader($tmpFile);
-				unlink($tmpFile);
+				$ebookReader = new EbookReader($tmpFile, true);
 			}
 		}
 		else {

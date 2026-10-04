@@ -6,6 +6,8 @@ use Kiwilan\Ebook\Ebook;
 
 class EbookReader {
     
+    private string $mBookFilePath;
+    private bool $mTempFile = false;
     private ?Ebook $mBook = null;
 
     private array $mCoverSize = [0, 0];
@@ -13,9 +15,19 @@ class EbookReader {
     /**
 	 * @param string $ebookFilePath
 	 */
-	public function __construct( $ebookFilePath ) {
-		$this->read($ebookFilePath);
+	public function __construct( string $ebookFilePath, bool $tempFile = false ) {
+
+        $this->mBookFilePath = $ebookFilePath;
+        $this->mTempFile = $tempFile;
+        $this->read($ebookFilePath);
 	}
+
+    public function __destruct()
+    {
+        if ($this->mTempFile) {
+            unlink($this->mBookFilePath);
+        }
+    }
 
     private function read(string $ebookFilePath) {
         
