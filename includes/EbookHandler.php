@@ -256,8 +256,7 @@ abstract class EbookHandler extends ImageHandler {
 	private function getEbookReader( $state, $path ) {
 		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
 		if ( $ebookReader == null ) {
-			$ebookReader = $this->createEbookReader($state, $path);
-			$ebookReader = new EbookReader($path);
+			$ebookReader = $this->createEbookReader($path);
 			$state->setHandlerState( self::STATE_EBOOK_READER, $ebookReader );
 		}
 		return $ebookReader;
@@ -277,11 +276,10 @@ abstract class EbookHandler extends ImageHandler {
 	}
 
 	/**
-	 * @param \MediaHandlerState $state
 	 * @param string $path
 	 * @return EbookReader|null
 	 */
-	protected function createEbookReader($state, string $path): ?EbookReader {
+	protected function createEbookReader(string $path): ?EbookReader {
 		return null;
 	}
 
