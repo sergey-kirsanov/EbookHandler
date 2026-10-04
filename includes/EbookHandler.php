@@ -493,7 +493,7 @@ class EbookHandler extends ImageHandler {
 							else {
 								// It can be so that this code called before $ebookReader is
 								// initialized and put to state
-								$dimsByPage[$i] = self::getPageSize([0,0]);
+								$dimsByPage[$i] = self::getPageSize([50,50]);
 							}
 						}
 					return [ 'pageCount' => 1, 'dimensionsByPage' => $dimsByPage ];
