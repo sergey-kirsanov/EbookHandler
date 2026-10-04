@@ -19,9 +19,11 @@ class EpubHandler extends EbookHandler {
 		if ( $ext === "" ) {
 			print("I am here");
 			$tmpFile = $path . '.epub';
-			copy($path, $tmpFile);
-			$ebookReader = new EbookReader($tmpFile);
-			unlink($tmpFile);
+			var_dump($tmpFile);
+			if (copy($path, $tmpFile)) {
+				$ebookReader = new EbookReader($tmpFile);
+				unlink($tmpFile);
+			}
 		}
 		else {
 			$ebookReader = new EbookReader($path);
