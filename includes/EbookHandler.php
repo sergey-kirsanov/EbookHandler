@@ -249,7 +249,7 @@ abstract class EbookHandler extends ImageHandler {
 	 * @param File $file
 	 * @return EbookReader
 	 */
-	private function getEbookReaderForFile(File $file ): EbookReader {
+	private function getEbookReaderForFile(File $file ): ?EbookReader {
 		$ebookReader = $file->getHandlerState( self::STATE_EBOOK_READER );
 		if ( $ebookReader == null ) {
 			$ebookReader = $this->createEbookReaderForFile($file);
@@ -454,7 +454,7 @@ abstract class EbookHandler extends ImageHandler {
 					for ( $i = 1; $i <= $count; $i++ ) {
 							// TODO: For the time being (we do not have API to get also pages separately from e-book)
 							// so we use cover size
-							$dimsByPage[$i] = $ebookReader->getCoverSize();
+							$dimsByPage[$i] = $ebookReader != null ? $ebookReader->getCoverSize() : [50,50];
 					}
 
 					return [ 'pageCount' => $count, 'dimensionsByPage' => $dimsByPage ];
