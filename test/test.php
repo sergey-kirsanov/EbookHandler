@@ -5,7 +5,7 @@ require_once( "../includes/EbookReader.php");
 
 use MediaWiki\Extension\EbookHandler\EbookReader;
 
-$reader = new EbookReader(__DIR__ . '/alice-lewis-carroll.mobi');
+$reader = new EbookReader(__DIR__ . '/alice-lewis-carroll.fb2');
 
 var_dump($reader->getCoverSize());
 
