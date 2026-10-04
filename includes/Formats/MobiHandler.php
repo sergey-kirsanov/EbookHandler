@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\EbookHandler\formats;
+namespace MediaWiki\Extension\EbookHandler\Formats;
 
 use MediaWiki\Extension\EbookHandler\EbookHandler;
 use MediaWiki\Extension\EbookHandler\EbookReader;
@@ -10,9 +10,9 @@ class MobiHandler extends EbookHandler {
 	 * @param string $path
 	 * @return EbookReader|null
 	 */
-	protected function createEbookReader(string $path): ?EbookReader {
+	protected function createEbookReader(string $path): EbookReader {
 		
-		return EbookHandler::createEbookReaderForFileWithExt($path, "mobi");
+		return EbookHandler::createEbookReaderExt($path, "mobi");
 
 	}
 }

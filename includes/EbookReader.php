@@ -43,35 +43,40 @@ class EbookReader {
         }
     }
 
-    public function saveCoverImageAs(string $coverFilePath) {
+    public function saveCoverImageAs(string $coverFilePath): bool {
         
         if ($coverFilePath == null) {
-            return null;
+            return false;
         }    
 
         $coverImage = $this->mBook->getCover();
         if ($coverImage == null){
-            return null;
+            return false;
         }
 
         if ($coverImage->saveTo($coverFilePath)){
-             return $coverFilePath;
+             return true;
         }
 
-        return null;
+        return false;
     }
 
-    public function getCoverSize(){
+    public function getBookFilePath(): string {
+
+        return $this->mBookFilePath;
+    }
+
+    public function getCoverSize(): array {
 
         return $this->mCoverSize;
     }
 
-    public function getPageCount() {
+    public function getPageCount(): ?int {
 
         return $this->mBook->getPagesCount();
     }
 
-    public function getMetadata() {
+    public function getMetadata(): ?array {
         
         if ($this->mBook == null) {
             return null;

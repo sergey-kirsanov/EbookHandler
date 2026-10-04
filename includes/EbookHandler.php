@@ -180,33 +180,16 @@ abstract class EbookHandler extends ImageHandler {
 			return $this->doThumbError( $width, $height, 'thumbnail_dest_directory' );
 		}
 
-		// Thumbnail extraction is very inefficient for large files.
-		// Provide a way to pool count limit the number of downloaders.
-		if ( $image->getSize() >= self::LARGE_FILE ) {
-			$work = new PoolCounterWorkViaCallback( 'GetLocalFileCopy', sha1( $image->getName() ),
-				[
-					'doWork' => static function () use ( $image ) {
-						return $image->getLocalRefPath();
-					}
-				]
-			);
-			$srcPath = $work->execute();
-		} else {
-			$srcPath = $image->getLocalRefPath();
-		}
+		$ebookReader = $this->getEbookReaderForFile($image);
 
-		if ( $srcPath === false ) {
+		if ( $ebookReader == null ) {
 			// could not download original
 			return $this->doThumbError( $width, $height, 'filemissing' );
 		}
 
-		$ebookReader = new EbookReader($srcPath);
-		$image->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
+		$res = $ebookReader->saveCoverImageAs($dstPath);
 
-		$realTmpFileName = $ebookReader->saveCoverImageAs($dstPath);
-		$fileSize = filesize($realTmpFileName);
-
-		if ( $realTmpFileName == null || $fileSize == 0) {
+		if ( !$res ) {
 			$err = sprintf( 'thumbnail failed on %s: image %s does not have cover "',
 				wfHostname(), $image->getName() );
 			wfDebugLog( 'thumbnail', $err);
@@ -253,7 +236,7 @@ abstract class EbookHandler extends ImageHandler {
 	 * @param string $path
 	 * @return EbookReader
 	 */
-	private function getEbookReader( $state, $path ) {
+	private function getEbookReader(\MediaHandlerState $state, string $path ): EbookReader {
 		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
 		if ( $ebookReader == null ) {
 			$ebookReader = $this->createEbookReader($path);
@@ -262,20 +245,45 @@ abstract class EbookHandler extends ImageHandler {
 		return $ebookReader;
 	}
 
+	/**
+	 * @param File $file
+	 * @return EbookReader
+	 */
+	private function getEbookReaderForFile(File $file ): EbookReader {
+		$ebookReader = $file->getHandlerState( self::STATE_EBOOK_READER );
+		if ( $ebookReader == null ) {
+			$ebookReader = $this->createEbookReaderForFile($file);
+			$file->setHandlerState( self::STATE_EBOOK_READER, $ebookReader );
+		}
+		return $ebookReader;
+	}
+
 	private function createEbookReaderForFile(File $file): ?EbookReader {
 		
-		$ebookReader = null;	
-
-		if ( !($file->getLocalRefPath() === false) ) { //TODO: Heavy operation
-		
-			$ebookReader = new EbookReader($file->getName());
-			$file->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
+		// Provide a way to pool count limit the number of downloaders.
+		if ( $file->getSize() >= self::LARGE_FILE ) {
+			$work = new PoolCounterWorkViaCallback( 'GetLocalFileCopy', sha1( $file->getName() ),
+				[
+					'doWork' => static function () use ( $file ) {
+						return $file->getLocalRefPath();
+					}
+				]
+			);
+			$srcPath = $work->execute();
+		} else {
+			$srcPath = $file->getLocalRefPath();
 		}
+
+		if ($srcPath === false) {
+			return null;
+		}
+
+		$ebookReader = new EbookReader($srcPath);
 
 		return $ebookReader;
 	}
 
-	protected function createEbookReaderForFileWithExt(string $path, string $actualExt) {
+	protected function createEbookReaderExt(string $path, string $actualExt): EbookReader {
 		$ebookReader = null;	
 
 		$ext = pathinfo($path, PATHINFO_EXTENSION);
@@ -296,7 +304,7 @@ abstract class EbookHandler extends ImageHandler {
 	 * @param string $path
 	 * @return EbookReader|null
 	 */
-	abstract protected function createEbookReader(string $path): ?EbookReader;
+	abstract protected function createEbookReader(string $path): EbookReader;
 
 	/**
 	 * @param \MediaHandlerState $state
@@ -431,10 +439,7 @@ abstract class EbookHandler extends ImageHandler {
 		$info = $file->getHandlerState( self::STATE_DIMENSION_INFO );
 		if ( !$info ) {
 			$cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
-			$ebookReader = $file->getHandlerState(self::STATE_EBOOK_READER);
-			if ( $ebookReader == null ) {
-				$ebookReader = $this->createEbookReaderForFile($file);
-			}
+			$ebookReader = $this->getEbookReaderForFile($file);
 			
 			$info = $cache->getWithSetCallback(
 				$cache->makeKey( 'file-ebook-dimensions', $file->getSha1() ),
@@ -446,19 +451,13 @@ abstract class EbookHandler extends ImageHandler {
 					// so we limit to one page
 					$count = 1;
 					
-						for ( $i = 1; $i <= $count; $i++ ) {
-							if ( $ebookReader != null ) {
-								// TODO: For the time being (we do not have API to get also pages separately from e-book)
-								// so we use cover size
-								$dimsByPage[$i] = $ebookReader->getCoverSize();
-							}
-							else {
-								// It can be so that this code called before $ebookReader is
-								// initialized and put to state
-								$dimsByPage[$i] = self::getPageSize([50,50]);
-							}
-						}
-					return [ 'pageCount' => 1, 'dimensionsByPage' => $dimsByPage ];
+					for ( $i = 1; $i <= $count; $i++ ) {
+							// TODO: For the time being (we do not have API to get also pages separately from e-book)
+							// so we use cover size
+							$dimsByPage[$i] = $ebookReader->getCoverSize();
+					}
+
+					return [ 'pageCount' => $count, 'dimensionsByPage' => $dimsByPage ];
 				}
 			);
 		}
