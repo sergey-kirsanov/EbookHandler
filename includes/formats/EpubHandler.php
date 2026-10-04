@@ -16,7 +16,8 @@ class EpubHandler extends EbookHandler {
 		$ebookReader = null;	
 
 		$ext = pathinfo($path, PATHINFO_EXTENSION);
-		if ( $ext == "" ) {
+		if ( $ext === "" ) {
+			print("I am here");
 			$tmpFile = $path . '.epub';
 			copy($path, $tmpFile);
 			$ebookReader = new EbookReader($tmpFile);

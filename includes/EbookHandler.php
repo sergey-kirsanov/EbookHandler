@@ -35,7 +35,7 @@ use TransformParameterError;
  * http://www.gnu.org/copyleft/gpl.html
  */
 
-class EbookHandler extends ImageHandler {
+abstract class EbookHandler extends ImageHandler {
 
 	/**
 	 * 10MB is considered a large file
