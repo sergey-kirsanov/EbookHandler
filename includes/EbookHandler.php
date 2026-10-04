@@ -255,7 +255,7 @@ class EbookHandler extends ImageHandler {
 	private function getEbookReader( $state, $path ) {
 		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
 		if ( $ebookReader == null ) {
-			$ebookReader = $this->createEbookReader2($state, $path);
+			$ebookReader = $this->createEbookReader($state, $path);
 			$ebookReader = new EbookReader($path);
 			$state->setHandlerState( self::STATE_EBOOK_READER, $ebookReader );
 		}
@@ -281,13 +281,7 @@ class EbookHandler extends ImageHandler {
 	 * @return EbookReader|null
 	 */
 	protected function createEbookReader($state, string $path): ?EbookReader {
-		
-		$ebookReader = null;	
-
-		$ebookReader = new EbookReader($path);
-		$state->setHandlerState(self::STATE_EBOOK_READER, $ebookReader);
-
-		return $ebookReader;
+		return null;
 	}
 
 	/**
@@ -395,6 +389,7 @@ class EbookHandler extends ImageHandler {
 				$id = $this->sharptrim($f["id"], "exif-");
 				$id = $this->sharptrim($id, "exif_");
 				$name = wfMessage($id)->text();
+				$value = $f["value"];
 				$newF = ["id" => $id, "name" => $name, "value" => $value];
 				$newVisible[$i] = $newF;
 			}
@@ -476,7 +471,7 @@ class EbookHandler extends ImageHandler {
 			$cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
 			$ebookReader = $file->getHandlerState(self::STATE_EBOOK_READER);
 			if ( $ebookReader == null ) {
-				$ebookReader = $this->createEbookReader($file);
+				$ebookReader = $this->createEbookReaderForFile($file);
 			}
 			
 			$info = $cache->getWithSetCallback(
