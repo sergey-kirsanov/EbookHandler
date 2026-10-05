@@ -236,7 +236,7 @@ abstract class EbookHandler extends ImageHandler {
 		$metadata = $ebookReader->GetMetadata();
 
 		$meta = new BitmapMetadataHandler();
-		$meta->addMetadata( $metadata, 'other' );
+		$meta->addMetadata( $metadata, 'native' );
 		$data = [];
 		$data['mergedMetadata'] = $meta->getMetadataArray();
 
