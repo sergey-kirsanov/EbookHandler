@@ -331,7 +331,7 @@ abstract class EbookHandler extends ImageHandler {
 	 * @return string|bool
 	 */
 	public function getPageText( File $image, $page ) {
-		// TODO: Bbecause we do not have the API to read content of particular page yet	
+		// TODO: Because we do not have the API to read content of particular page yet	
 		return false;
 	}
 
