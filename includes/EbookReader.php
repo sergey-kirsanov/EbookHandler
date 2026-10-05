@@ -44,17 +44,18 @@ class EbookReader {
 			}
 		}
 
-        if ($this->mBook != null && $this->mBook->hasCover()) {
+        if ($this->mBook == null) {
+            // Do it again and this time it will fail with a stack trace
+            $this->mBook = Ebook::read($ebookFilePath);
+        }
+
+        if ($this->mBook->hasCover()) {
             $imageSize = getimagesizefromstring($this->mBook->getCover()->getContents());
             $this->mCoverSize = [$imageSize[0], $imageSize[1]];
         }
     }
 
     public function saveCoverImageAs(string $coverFilePath): bool {
-        if ($this->mBook == null) {
-            return false;
-        } 
-
         if ($coverFilePath == null) {
             return false;
         }    
@@ -80,14 +81,10 @@ class EbookReader {
     }
 
     public function getPageCount(): ?int {
-        return $this->mBook != null ? $this->mBook->getPagesCount() : 0;
+        return $this->mBook->getPagesCount();
     }
 
     public function getMetadata(): array {
-        if ($this->mBook == null) {
-            return [];
-        }
-
         $data = [];
 
         $data['EbookHandler-Title'] = $this->mBook->getTitle();
