@@ -191,7 +191,7 @@ abstract class EbookHandler extends ImageHandler {
 		catch(Exception) { // Do not know why but simple xml could raise 'Document is empty' exception first time
 			sleep(1);
 			$numTries--;
-			printf("Tries left %d", $numTries);
+			printf("Tries left %d\n", $numTries);
 			if ($numTries > 0) {
 				goto try_again;
 			}
@@ -339,7 +339,7 @@ abstract class EbookHandler extends ImageHandler {
 		catch(Exception) { // Do not know why but simple xml could raise 'Document is empty' exception first time
 			sleep(1);
 			$numTries--;
-			printf("Tries left %d", $numTries);
+			printf("Tries left %d\n", $numTries);
 			if ($numTries > 0) {
 				goto try_again;
 			}
