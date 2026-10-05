@@ -40,7 +40,7 @@ abstract class EbookHandler extends ImageHandler {
 	/**
 	 * 10MB is considered a large file
 	 */
-	private const LARGE_FILE = 100*1024;
+	private const LARGE_FILE = 1e7;
 
 	/**
 	 * Key for getHandlerState for value of type EbookReader
@@ -180,6 +180,8 @@ abstract class EbookHandler extends ImageHandler {
 			return $this->doThumbError( $width, $height, 'thumbnail_dest_directory' );
 		}
 
+		sleep(1);
+		
 		$ebookReader = $this->getEbookReaderForFile($image);
 
 		if ( $ebookReader == null ) {
