@@ -181,7 +181,7 @@ abstract class EbookHandler extends ImageHandler {
 			return $this->doThumbError( $width, $height, 'thumbnail_dest_directory' );
 		}
 
-		$numTries = 5;
+		$numTries = 30;
 		try_again:
 
 		$ebookReader = null;
