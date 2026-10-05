@@ -181,13 +181,19 @@ abstract class EbookHandler extends ImageHandler {
 			return $this->doThumbError( $width, $height, 'thumbnail_dest_directory' );
 		}
 
+		$numTries = 5;
+		try_again:
+
 		$ebookReader = null;
 		try {
 			$ebookReader = $this->getEbookReaderForFile($image);
 		}
 		catch(Exception) { // Do not know why but simple xml could raise 'Document is empty' exception first time
 			sleep(1);
-			$ebookReader = $this->getEbookReaderForFile($image);
+			$numTries--;
+			if ($numTries > 0) {
+				goto try_again;
+			}
 		}
 
 		if ( $ebookReader == null ) {
