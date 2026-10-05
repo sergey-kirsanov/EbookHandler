@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\EbookHandler;
 use File;
 use ImageHandler;
 use BitmapMetadataHandler;
+use Exception;
 use MediaTransformError;
 use MediaTransformOutput;
 use MediaWiki\Context\IContextSource;
@@ -180,10 +181,14 @@ abstract class EbookHandler extends ImageHandler {
 			return $this->doThumbError( $width, $height, 'thumbnail_dest_directory' );
 		}
 
-		$hash = $image->getSha1();
-		var_dump($hash);
-
-		$ebookReader = $this->getEbookReaderForFile($image);
+		$ebookReader = null;
+		try {
+			$ebookReader = $this->getEbookReaderForFile($image);
+		}
+		catch(Exception) {
+			sleep(1);
+			$ebookReader = $this->getEbookReaderForFile($image);
+		}
 
 		if ( $ebookReader == null ) {
 			// could not download original
