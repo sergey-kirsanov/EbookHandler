@@ -132,6 +132,6 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ## Credits
 
+-   Inspired by djvuhandler from Tim Starling and PDfHandler by Martin Seidel (Xarax)
 -   [Ewilan Rivière](https://github.com/ewilan-riviere) author of `kiwilan/php-ebook` package
 -   [All Contributors](../../contributors)
--   Inspired by djvuhandler from Tim Starling and PDfHandler by Martin Seidel (Xarax)

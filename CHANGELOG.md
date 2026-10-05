@@ -1,0 +1,1 @@
+05.10.2026 Initial version with (epub, fb2 and mobi)
