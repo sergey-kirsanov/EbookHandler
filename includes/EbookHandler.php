@@ -40,7 +40,7 @@ abstract class EbookHandler extends ImageHandler {
 	/**
 	 * 10MB is considered a large file
 	 */
-	private const LARGE_FILE = 1e7;
+	private const LARGE_FILE = 100*1024;
 
 	/**
 	 * Key for getHandlerState for value of type EbookReader
@@ -315,7 +315,8 @@ abstract class EbookHandler extends ImageHandler {
 	public function getSizeAndMetadata( $state, $path ) {
 		$ebookReader = $this->getEbookReader( $state, $path );
 		if ($ebookReader == null) {
-			return [];
+			$sizes = self::getPageSize( [0,0] );
+			return $sizes + [ 'metadata' => [] ];
 		}
 
 		$metadata = $ebookReader->GetMetadata();
