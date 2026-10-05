@@ -37,7 +37,7 @@ cd extensions
 git clone git@github.com:sergey-kirsanov/EbookHandler.git
 ```
 
-After that you must install kiwilan/php-ebook into your MediaWiki installation using composer require (run following command from the root folder of your MediaWiki):
+After that you must install `kiwilan/php-ebook` into your MediaWiki installation using composer require (run following command from the root folder of your MediaWiki):
 ```bash
 composer require kiwilan/php-ebook
 ```
@@ -57,7 +57,7 @@ If this is not the case you must follow [this](https://www.mediawiki.org/wiki/Ma
 
 > [!NOTE]
 >
-> On my installation (MediaWiki 1.43.1) just following had to be added to LocalSetting.php (not sure if all options are safe to be used in production)
+> On my installation (MediaWiki 1.43.1) just following had to be added to LocalSetting.php (not sure if all options are safe to be used in production):
 >
 > ```php
 > $wgMimeDetectorCommand = "file -bi";
@@ -104,7 +104,7 @@ For the time being there is only common metadata extracted like Title, Author et
 
 ### Cover
 
-Cover can be extracted from eBook but is some cases it is not available in the book itself or it could be some issue.
+Cover can be extracted from eBook but in some cases it is not available in the book itself or it could be some issue.
 
 ## Testing
 
@@ -134,3 +134,4 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 -   [Ewilan Rivière](https://github.com/ewilan-riviere) author of `kiwilan/php-ebook` package
 -   [All Contributors](../../contributors)
+-   Inspired by djvuhandler from Tim Starling and PDfHandler by Martin Seidel (Xarax)
