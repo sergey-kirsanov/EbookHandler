@@ -185,7 +185,7 @@ abstract class EbookHandler extends ImageHandler {
 		try {
 			$ebookReader = $this->getEbookReaderForFile($image);
 		}
-		catch(Exception) {
+		catch(Exception) { // Do not know why but simple xml could raise 'Document is empty' exception first time
 			sleep(1);
 			$ebookReader = $this->getEbookReaderForFile($image);
 		}
