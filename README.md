@@ -131,7 +131,7 @@ Now, you should have all dependencies installed.
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently and a list of known issues.
 
 ## Credits
 
