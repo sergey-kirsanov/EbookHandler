@@ -97,10 +97,13 @@ wfLoadExtension( 'EbookHandler' );
 Now you could navigate to File page with some eBook and you must see its cover (if present in file) and metadata at bottom of this page.
 [[File|xxx.epub]] and [[File|xxx.epub|thumb]] links should also work and you will see cover picture or its thumbnail respectively on your MediaWiki page.   
 
+<img width="353" height="546" alt="fb2-thumb" src="https://github.com/user-attachments/assets/7c6f878e-49b0-45a9-97f6-d750eb921294" />
 
 ### Metadata
 
 For the time being there is only common metadata extracted like Title, Author etc.
+
+<img width="435" height="555" alt="common-metadata" src="https://github.com/user-attachments/assets/d38f9e6d-ad5d-4c1c-92d7-e7484fb65222" />
 
 ### Cover
 
