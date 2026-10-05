@@ -3,6 +3,7 @@
 namespace MediaWiki\Extension\EbookHandler;
 
 use Kiwilan\Ebook\Ebook;
+use Exception;
 
 class EbookReader {
     
@@ -16,7 +17,6 @@ class EbookReader {
 	 * @param string $ebookFilePath
 	 */
 	public function __construct( string $ebookFilePath, bool $tempFile = false ) {
-
         $this->mBookFilePath = $ebookFilePath;
         $this->mTempFile = $tempFile;
         $this->read($ebookFilePath);
@@ -30,21 +30,31 @@ class EbookReader {
     }
 
     private function read(string $ebookFilePath) {
-        
         if (!Ebook::isValid($ebookFilePath)) {
             return;
         }    
-        
-        $this->mBook = Ebook::read($ebookFilePath);
 
-        if ($this->mBook->hasCover()) {
+		$numTries = 5;
+		while($this->mBook  == null && $numTries > 0) {
+			try {
+				$this->mBook = Ebook::read($ebookFilePath);
+			}
+			catch(Exception) { // Do not know why but simple xml could raise 'Document is empty' exception first time
+				$numTries--;
+			}
+		}
+
+        if ($this->mBook != null && $this->mBook->hasCover()) {
             $imageSize = getimagesizefromstring($this->mBook->getCover()->getContents());
             $this->mCoverSize = [$imageSize[0], $imageSize[1]];
         }
     }
 
     public function saveCoverImageAs(string $coverFilePath): bool {
-        
+        if ($this->mBook == null) {
+            return false;
+        } 
+
         if ($coverFilePath == null) {
             return false;
         }    
@@ -62,24 +72,20 @@ class EbookReader {
     }
 
     public function getBookFilePath(): string {
-
         return $this->mBookFilePath;
     }
 
     public function getCoverSize(): array {
-
         return $this->mCoverSize;
     }
 
     public function getPageCount(): ?int {
-
-        return $this->mBook->getPagesCount();
+        return $this->mBook != null ? $this->mBook->getPagesCount() : 0;
     }
 
-    public function getMetadata(): ?array {
-        
+    public function getMetadata(): array {
         if ($this->mBook == null) {
-            return null;
+            return [];
         }
 
         $data = [];

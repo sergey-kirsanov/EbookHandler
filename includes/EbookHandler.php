@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\EbookHandler;
 use File;
 use ImageHandler;
 use BitmapMetadataHandler;
-use Exception;
 use MediaTransformError;
 use MediaTransformOutput;
 use MediaWiki\Context\IContextSource;
@@ -46,7 +45,7 @@ abstract class EbookHandler extends ImageHandler {
 	/**
 	 * Key for getHandlerState for value of type EbookReader
 	 */
-	protected const STATE_EBOOK_READER = 'ebookReader';
+	private const STATE_EBOOK_READER = 'ebookReader';
 
 	/**
 	 * Key for getHandlerState for dimension info
@@ -136,17 +135,6 @@ abstract class EbookHandler extends ImageHandler {
 	}
 
 	/**
-	 * @param int $width
-	 * @param int $height
-	 * @param string $msg
-	 * @return MediaTransformError
-	 */
-	protected function doThumbError( $width, $height, $msg ) {
-		return new MediaTransformError( 'thumbnail_error',
-			$width, $height, wfMessage( $msg )->text() );
-	}
-
-	/**
 	 * @param File $image
 	 * @param string $dstPath
 	 * @param string $dstUrl
@@ -181,17 +169,7 @@ abstract class EbookHandler extends ImageHandler {
 			return $this->doThumbError( $width, $height, 'thumbnail_dest_directory' );
 		}
 
-		$numTries = 30;
-		$ebookReader = null;
-		while($ebookReader == null && $numTries > 0) {
-			try {
-				$ebookReader = $this->getEbookReaderForFile($image);
-			}
-			catch(Exception) { // Do not know why but simple xml could raise 'Document is empty' exception first time
-				sleep(1);
-				$numTries--;
-			}
-		}
+		$ebookReader = $this->getEbookReaderForFile($image);
 
 		if ( $ebookReader == null ) {
 			// could not download original
@@ -245,101 +223,14 @@ abstract class EbookHandler extends ImageHandler {
 	/**
 	 * @param \MediaHandlerState $state
 	 * @param string $path
-	 * @return EbookReader
-	 */
-	private function getEbookReader(\MediaHandlerState $state, string $path ): EbookReader {
-		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
-		if ( $ebookReader == null ) {
-			$ebookReader = $this->createEbookReader($path);
-			$state->setHandlerState( self::STATE_EBOOK_READER, $ebookReader );
-		}
-		return $ebookReader;
-	}
-
-	/**
-	 * @param File $file
-	 * @return EbookReader
-	 */
-	private function getEbookReaderForFile(File $file ): ?EbookReader {
-		$ebookReader = $file->getHandlerState( self::STATE_EBOOK_READER );
-		if ( $ebookReader == null ) {
-			$ebookReader = $this->createEbookReaderForFile($file);
-			$file->setHandlerState( self::STATE_EBOOK_READER, $ebookReader );
-		}
-		return $ebookReader;
-	}
-
-	private function createEbookReaderForFile(File $file): ?EbookReader {
-		
-		// Provide a way to pool count limit the number of downloaders.
-		if ( $file->getSize() >= self::LARGE_FILE ) {
-			$work = new PoolCounterWorkViaCallback( 'GetLocalFileCopy', sha1( $file->getName() ),
-				[
-					'doWork' => static function () use ( $file ) {
-						return $file->getLocalRefPath();
-					}
-				]
-			);
-			$srcPath = $work->execute();
-		} else {
-			$srcPath = $file->getLocalRefPath();
-		}
-
-		if ($srcPath === false) {
-			return null;
-		}
-
-		$ebookReader = $this->createEbookReader($srcPath);
-
-		return $ebookReader;
-	}
-
-	/**
-	 * @param string $path
-	 * @return EbookReader|null
-	 */
-	private function createEbookReader(string $path): EbookReader{
-
-		$ebookReader = null;	
-
-		$ext = pathinfo($path, PATHINFO_EXTENSION);
-		if ( $ext === "" ) {
-			$tmpFile = $path . '.' . $this->getActualExt();
-			if (copy($path, $tmpFile)) {
-				$ebookReader = new EbookReader($tmpFile, true);
-			}
-		}
-		else {
-			$ebookReader = new EbookReader($path);
-		}
-
-		return $ebookReader;
-	}
-
-	abstract protected function getActualExt(): string;
-
-	/**
-	 * @param \MediaHandlerState $state
-	 * @param string $path
 	 * @return array|bool
 	 */
 	public function getSizeAndMetadata( $state, $path ) {
 		
-		$numTries = 30;
-		$ebookReader = null;
-		while($ebookReader == null && $numTries > 0) {
-			try {
-				$ebookReader = $this->getEbookReader($state, $path);
-			}
-			catch(Exception) { // Do not know why but simple xml could raise 'Document is empty' exception first time
-				sleep(1);
-				$numTries--;
-			}
-		}
+		$ebookReader = $this->getEbookReader($state, $path);
 
 		if ($ebookReader == null) {
-			$sizes = self::getPageSize( [0,0] );
-			return $sizes + [ 'metadata' => [] ];
+			return false;
 		}
 
 		$metadata = $ebookReader->GetMetadata();
@@ -356,17 +247,6 @@ abstract class EbookHandler extends ImageHandler {
 		}
 
 		return [ 'metadata' => $data ];
-	}
-
-	private static function getPageSize( $size ) {
-		global $wgEbookHandlerDpi;
-
-			$width  = intval($size[0] / 72 * $wgEbookHandlerDpi );
-			$height = intval($size[1] / 72 * $wgEbookHandlerDpi );
-			return [
-				'width' => $width,
-				'height' => $height
-			];
 	}
 
 	/**
@@ -418,17 +298,6 @@ abstract class EbookHandler extends ImageHandler {
 		return $formatted;
 	}
 
-	/** @inheritDoc */
-	protected function formatTag( string $key, $vals, $context = false ) {
-		switch ( $key ) {
-			default:
-				break;
-		}
-
-		// Use default formatting
-		return false;
-	}
-
 	/**
 	 * @param File $image
 	 * @return bool|int
@@ -457,6 +326,46 @@ abstract class EbookHandler extends ImageHandler {
 	}
 
 	/**
+	 * @param File $image
+	 * @param int $page
+	 * @return string|bool
+	 */
+	public function getPageText( File $image, $page ) {
+		// TODO: Bbecause we do not have the API to read content of particular page yet	
+		return false;
+	}
+
+	public function getWarningConfig( $file ) {
+		return null;
+	}
+
+	public function useSplitMetadata() {
+		return true;
+	}
+
+	/**
+	 * @param int $width
+	 * @param int $height
+	 * @param string $msg
+	 * @return MediaTransformError
+	 */
+	protected function doThumbError( $width, $height, $msg ) {
+		return new MediaTransformError( 'thumbnail_error',
+			$width, $height, wfMessage( $msg )->text() );
+	}
+
+	/** @inheritDoc */
+	protected function formatTag( string $key, $vals, $context = false ) {
+		switch ( $key ) {
+			default:
+				break;
+		}
+
+		// Use default formatting
+		return false;
+	}
+
+	/**
 	 * @param File $file
 	 * @return bool|mixed
 	 */
@@ -469,7 +378,7 @@ abstract class EbookHandler extends ImageHandler {
 			$info = $cache->getWithSetCallback(
 				$cache->makeKey( 'file-ebook-dimensions', $file->getSha1() ),
 				$cache::TTL_MONTH,
-				static function () use ( $file, $ebookReader ) {
+				static function () use ( $ebookReader ) {
 
 					$dimsByPage = [];
 					// TODO: For the time being (we do not have API to get also pages separately from e-book)
@@ -490,22 +399,88 @@ abstract class EbookHandler extends ImageHandler {
 		return $info;
 	}
 
+	abstract protected function getHandlerExtension(): string;
+
 	/**
-	 * @param File $image
-	 * @param int $page
-	 * @return bool
+	 * @param \MediaHandlerState $state
+	 * @param string $path
+	 * @return EbookReader
 	 */
-	public function getPageText( File $image, $page ) {
-		// TODO: It will not be displayed anyway
-		// because we do not have the API to read content of particular page yet	
-		return "dummy";
+	private function getEbookReader(\MediaHandlerState $state, string $path ): EbookReader {
+		$ebookReader = $state->getHandlerState( self::STATE_EBOOK_READER );
+		if ( $ebookReader == null ) {
+			$ebookReader = $this->createEbookReader($path);
+			$state->setHandlerState( self::STATE_EBOOK_READER, $ebookReader );
+		}
+		return $ebookReader;
 	}
 
-	public function getWarningConfig( $file ) {
-		return null;
+	/**
+	 * @param File $file
+	 * @return EbookReader
+	 */
+	private function getEbookReaderForFile(File $file ): ?EbookReader {
+		$ebookReader = $file->getHandlerState( self::STATE_EBOOK_READER );
+		if ( $ebookReader == null ) {
+			$ebookReader = $this->createEbookReaderForFile($file);
+			$file->setHandlerState( self::STATE_EBOOK_READER, $ebookReader );
+		}
+		return $ebookReader;
 	}
 
-	public function useSplitMetadata() {
-		return true;
+	private function createEbookReaderForFile(File $file): ?EbookReader {
+		// Provide a way to pool count limit the number of downloaders.
+		if ( $file->getSize() >= self::LARGE_FILE ) {
+			$work = new PoolCounterWorkViaCallback( 'GetLocalFileCopy', sha1( $file->getName() ),
+				[
+					'doWork' => static function () use ( $file ) {
+						return $file->getLocalRefPath();
+					}
+				]
+			);
+			$srcPath = $work->execute();
+		} else {
+			$srcPath = $file->getLocalRefPath();
+		}
+
+		if ($srcPath === false) { //File probably deleted
+			return null;
+		}
+
+		$ebookReader = $this->createEbookReader($srcPath);
+
+		return $ebookReader;
+	}
+
+	/**
+	 * @param string $path
+	 * @return EbookReader
+	 */
+	private function createEbookReader(string $path): EbookReader{
+		$ebookReader = null;	
+
+		$ext = pathinfo($path, PATHINFO_EXTENSION);
+		if ( $ext === "" ) {
+			$tmpFile = $path . '.' . $this->getHandlerExtension();
+			if (copy($path, $tmpFile)) {
+				$ebookReader = new EbookReader($tmpFile, true);
+			}
+		}
+		else {
+			$ebookReader = new EbookReader($path);
+		}
+
+		return $ebookReader;
+	}
+
+	private static function getPageSize( array $size ) {
+		global $wgEbookHandlerDpi;
+
+			$width  = intval($size[0] / 72 * $wgEbookHandlerDpi );
+			$height = intval($size[1] / 72 * $wgEbookHandlerDpi );
+			return [
+				'width' => $width,
+				'height' => $height
+			];
 	}
 }
