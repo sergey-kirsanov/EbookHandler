@@ -180,8 +180,9 @@ abstract class EbookHandler extends ImageHandler {
 			return $this->doThumbError( $width, $height, 'thumbnail_dest_directory' );
 		}
 
-		sleep(1);
-		
+		$hash = $image->getSha1();
+		var_dump($hash);
+
 		$ebookReader = $this->getEbookReaderForFile($image);
 
 		if ( $ebookReader == null ) {
