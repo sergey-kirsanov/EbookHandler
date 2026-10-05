@@ -2,7 +2,7 @@
 
 ## About extension
 
-This is [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) Media handler extension to read metadata and extract covers from eBooks.
+This is [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) Media handler extension to get a preview: read metadata and extract covers from eBooks.
 
 -   eBooks: `.epub`, `.fb2`, `.mobi`
 
