@@ -278,17 +278,22 @@ abstract class EbookHandler extends ImageHandler {
 			return null;
 		}
 
-		$ebookReader = new EbookReader($srcPath);
+		$ebookReader = $this->createEbookReader($srcPath);
 
 		return $ebookReader;
 	}
 
-	protected function createEbookReaderExt(string $path, string $actualExt): EbookReader {
+	/**
+	 * @param string $path
+	 * @return EbookReader|null
+	 */
+	private function createEbookReader(string $path): EbookReader{
+
 		$ebookReader = null;	
 
 		$ext = pathinfo($path, PATHINFO_EXTENSION);
 		if ( $ext === "" ) {
-			$tmpFile = $path . '.' . $actualExt;
+			$tmpFile = $path . '.' . $this->getActualExt();
 			if (copy($path, $tmpFile)) {
 				$ebookReader = new EbookReader($tmpFile, true);
 			}
@@ -300,11 +305,7 @@ abstract class EbookHandler extends ImageHandler {
 		return $ebookReader;
 	}
 
-	/**
-	 * @param string $path
-	 * @return EbookReader|null
-	 */
-	abstract protected function createEbookReader(string $path): EbookReader;
+	abstract protected function getActualExt(): string;
 
 	/**
 	 * @param \MediaHandlerState $state
