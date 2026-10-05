@@ -238,7 +238,7 @@ abstract class EbookHandler extends ImageHandler {
 		$meta = new BitmapMetadataHandler();
 		$meta->addMetadata( $metadata, 'native' );
 		$data = [];
-		$data['mergedMetadata'] = $meta->getMetadataArray();
+		$data['commonMetadata'] = $meta->getMetadataArray();
 
 		$size = $ebookReader->getCoverSize();
 		$sizes = self::getPageSize( $size );
