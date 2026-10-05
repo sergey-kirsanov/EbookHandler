@@ -182,18 +182,14 @@ abstract class EbookHandler extends ImageHandler {
 		}
 
 		$numTries = 30;
-		try_again:
-
 		$ebookReader = null;
-		try {
-			$ebookReader = $this->getEbookReaderForFile($image);
-		}
-		catch(Exception) { // Do not know why but simple xml could raise 'Document is empty' exception first time
-			sleep(1);
-			$numTries--;
-			printf("Tries left %d\n", $numTries);
-			if ($numTries > 0) {
-				goto try_again;
+		while($ebookReader == null && $numTries > 0) {
+			try {
+				$ebookReader = $this->getEbookReaderForFile($image);
+			}
+			catch(Exception) { // Do not know why but simple xml could raise 'Document is empty' exception first time
+				sleep(1);
+				$numTries--;
 			}
 		}
 
@@ -330,18 +326,14 @@ abstract class EbookHandler extends ImageHandler {
 	public function getSizeAndMetadata( $state, $path ) {
 		
 		$numTries = 30;
-		try_again:
-
 		$ebookReader = null;
-		try {
-			$ebookReader = $this->getEbookReader($state, $path);
-		}
-		catch(Exception) { // Do not know why but simple xml could raise 'Document is empty' exception first time
-			sleep(1);
-			$numTries--;
-			printf("Tries left %d\n", $numTries);
-			if ($numTries > 0) {
-				goto try_again;
+		while($ebookReader == null && $numTries > 0) {
+			try {
+				$ebookReader = $this->getEbookReader($state, $path);
+			}
+			catch(Exception) { // Do not know why but simple xml could raise 'Document is empty' exception first time
+				sleep(1);
+				$numTries--;
 			}
 		}
 
