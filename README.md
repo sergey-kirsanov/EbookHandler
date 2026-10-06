@@ -11,6 +11,9 @@ This extension is based on [kiwilan\php-ebook](https://github.com/kiwilan/php-eb
 ## Requirements
 
 -   **PHP version** `>=8.1` and so the version of MediaWiki which runs on this php version (1.43.1 in my case)
+-   **PHP extensions**:
+    -   [`zip`](https://www.php.net/manual/en/book.zip.php)
+    -   [`xml`](https://www.php.net/manual/en/book.xml.php)
 -   **Binaries**
     - /usr/bin/convert (ImageMagick) for making thumbnails of covers
 
