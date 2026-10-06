@@ -11,9 +11,6 @@ This extension is based on [kiwilan\php-ebook](https://github.com/kiwilan/php-eb
 ## Requirements
 
 -   **PHP version** `>=8.1` and so the version of MediaWiki which runs on this php version (1.43.1 in my case)
--   **PHP extensions**:
-    -   [`zip`](https://www.php.net/manual/en/book.zip.php)
-    -   [`xml`](https://www.php.net/manual/en/book.xml.php)
 -   **Binaries**
     - /usr/bin/convert (ImageMagick) for making thumbnails of covers
 
@@ -66,8 +63,6 @@ If this is not the case you must follow [this](https://www.mediawiki.org/wiki/Ma
 >     array( 'epub', 'mobi', 'fb2' )
 > );
 >
-> $wgStrictFileExtensions = false;
->
 > $wgHooks['MimeMagicInit'][] = static function ( $mime ) {
 >    $mime->addExtraTypes( 'application/epub+zip epub' );
 >    $mime->addExtraTypes( 'application/x-fictionbook+xml fb2' );
@@ -75,12 +70,13 @@ If this is not the case you must follow [this](https://www.mediawiki.org/wiki/Ma
 > };
 >
 > $wgHooks['MimeMagicImproveFromExtension'][] = static function ( $mimeAnalyzer, $ext, &$mime ) {
->    if ( in_array( $ext, ['fb2'] ) ) {
->        $mime = 'application/x-fictionbook+xml';
->    }
 >
 >    if ( in_array( $ext, ['epub'] ) ) {
 >        $mime = 'application/epub+zip';
+>    }
+>
+>    if ( in_array( $ext, ['fb2'] ) ) {
+>        $mime = 'application/x-fictionbook+xml';
 >    }
 >
 >    if ( in_array( $ext, ['mobi'] ) ) {
@@ -95,7 +91,7 @@ wfLoadExtension( 'EbookHandler' );
 ```
 
 Now you could navigate to File page with some eBook and you must see its cover (if present in file) and metadata at bottom of this page.
-[[File|xxx.epub]] and [[File|xxx.epub|thumb]] links should also work and you will see cover picture or its thumbnail respectively on your MediaWiki page.   
+[[File|xxx.epub]] and [[File|xxx.epub|thumb]] links should also work and you will see cover picture on your MediaWiki page.   
 
 <img width="353" height="546" alt="fb2-thumb" src="https://github.com/user-attachments/assets/7c6f878e-49b0-45a9-97f6-d750eb921294" />
 
