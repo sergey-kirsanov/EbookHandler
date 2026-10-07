@@ -55,21 +55,21 @@ class EbookReader {
         }
     }
 
-    public function saveCoverImageAs(string $coverFilePath): bool {
+    public function saveCoverImageAs(string $coverFilePath): ?string {
         if ($coverFilePath == null) {
-            return false;
+            return null;
         }    
 
         $coverImage = $this->mBook->getCover();
         if ($coverImage == null){
-            return false;
+            return null;
         }
 
         if ($coverImage->saveTo($coverFilePath)){
-             return true;
+             return $coverFilePath;
         }
 
-        return false;
+        return null;
     }
 
     public function getBookFilePath(): string {

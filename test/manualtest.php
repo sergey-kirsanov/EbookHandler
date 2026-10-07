@@ -15,6 +15,6 @@ $size = $reader->getCoverSize();
 var_dump($size);
 
 $res = $reader->saveCoverImageAs(__DIR__ . '/alice-lewis-carroll');
-if ($res) {
-    print("Cover image saved");
+if ($res != null) {
+    printf("Cover image saved to %s", $res);
 }
