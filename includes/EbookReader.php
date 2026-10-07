@@ -101,11 +101,14 @@ class EbookReader {
         }
         $data['EbookHandler-Copyright'] = $this->mBook->getCopyright(100);
         
+        $tags = "";
         foreach ($this->mBook->getTags() as $key => $val) {
-            $data['EbookHandler-Tags ' . $key] = $val;
+            $tags .= ' ' . trim($val);
         }
+        $data['EbookHandler-Tags'] = trim($tags);
+
         foreach ($this->mBook->getExtras() as $key => $val) {
-            $data['EbookHandler-Extra ' . $key] = $val;
+            $data['EbookHandler-Extra ' . $key] = trim($val);
         }
 
         return $data;
