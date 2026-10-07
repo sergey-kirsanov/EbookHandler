@@ -13,6 +13,10 @@
 	"exif-ebookhandler-language" : "Language",
 	"exif-ebookhandler-publisher": "Publisher",
 	"exif-ebookhandler-publishdate": "Publish date",
+	"exif-ebookhandler-series": "Series",
+	"exif-ebookhandler-volume": "Volume",
 	"exif-ebookhandler-identifier": "Book identifier",
-	"exif-ebookhandler-copyright": "Copyright"
+	"exif-ebookhandler-copyright": "Copyright",
+	"exif-ebookhandler-tags": "Tags",
+	"exif-ebookhandler-extra": "Extra"
 }

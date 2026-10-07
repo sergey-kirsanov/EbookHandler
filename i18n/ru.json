@@ -13,6 +13,10 @@
 	"exif-ebookhandler-language" : "Язык книги",
 	"exif-ebookhandler-publisher": "Издатель",
 	"exif-ebookhandler-publishdate": "Дата издания",
+	"exif-ebookhandler-series": "Серия",
+	"exif-ebookhandler-volume": "Том",
 	"exif-ebookhandler-identifier": "Идентификатор",
-	"exif-ebookhandler-copyright": "Права"
+	"exif-ebookhandler-copyright": "Права",
+	"exif-ebookhandler-tags": "Теги",
+	"exif-ebookhandler-extra": "Дополнительно"
 }

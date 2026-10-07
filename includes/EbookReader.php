@@ -108,7 +108,7 @@ class EbookReader {
         $data['EbookHandler-Tags'] = trim($tags);
 
         foreach ($this->mBook->getExtras() as $key => $val) {
-            $data['EbookHandler-Extra ' . $key] = trim($val);
+            $data['EbookHandler-Extra'] = $key . ' ' . trim($val);
         }
 
         return $data;
