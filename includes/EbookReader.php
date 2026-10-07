@@ -94,10 +94,19 @@ class EbookReader {
         $data['EbookHandler-Language'] = $this->mBook->getLanguage();
         $data['EbookHandler-Publisher'] = $this->mBook->getPublisher();
         $data['EbookHandler-PublishDate'] = $this->mBook->getPublishDate() != null ? $this->mBook->getPublishDate()->format("d.m.Y") : null;
+        $data['EbookHandler-Series'] = $this->mBook->getSeries();
+        $data['EbookHandler-Volume'] = $this->mBook->getVolume();
         foreach ($this->mBook->getIdentifiers() as $id) {
             $data['EbookHandler-Identifier'] = $id->getScheme() . " " . $id->getValue();
         }
         $data['EbookHandler-Copyright'] = $this->mBook->getCopyright(100);
+        
+        foreach ($this->mBook->getTags() as $key => $val) {
+            $data['EbookHandler-Tags ' . $key] = $val;
+        }
+        foreach ($this->mBook->getExtras() as $key => $val) {
+            $data['EbookHandler-Extra ' . $key] = $val;
+        }
 
         return $data;
     }

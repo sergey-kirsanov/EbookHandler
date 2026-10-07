@@ -13,7 +13,6 @@ This extension is based on [kiwilan\php-ebook](https://github.com/kiwilan/php-eb
 -   **PHP version** `>=8.1` and so the version of MediaWiki which runs on this php version (1.43.1 in my case)
 -   **PHP extensions**:
     -   [`zip`](https://www.php.net/manual/en/book.zip.php)
-    -   [`xml`](https://www.php.net/manual/en/book.xml.php)
 -   **Binaries**
     - /usr/bin/convert (ImageMagick) for making thumbnails of covers
 
@@ -63,7 +62,7 @@ If this is not the case you must follow [this](https://www.mediawiki.org/wiki/Ma
 > $wgMimeDetectorCommand = "file -bi";
 >
 > $wgFileExtensions = array_merge( $wgFileExtensions,
->     array( 'epub', 'mobi', 'fb2' )
+>     array( 'epub', 'fb2', 'mobi' )
 > );
 >
 > $wgHooks['MimeMagicInit'][] = static function ( $mime ) {
